@@ -15,6 +15,30 @@ namespace Mahjong.Model
             suit = pSuit;
         }
 
+        public Tile(int compareValue)
+        {
+            if (compareValue % 1000 >= 1)
+            {
+                suit = "z";
+                num = compareValue - 1000;
+            }
+            else if (compareValue % 100 >= 1)
+            {
+                suit = "m";
+                num = compareValue - 100;
+            }
+            else if (compareValue % 10 >= 1)
+            {
+                suit = "s";
+                num = compareValue - 10;
+            }
+            else
+            {
+                suit = "p";
+                num = compareValue ;
+            }
+        }
+
         public Tile(string psTileAbrreviation)
         {
             num = psTileAbrreviation[0] - '0';

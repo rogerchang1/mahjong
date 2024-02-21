@@ -34,10 +34,12 @@ namespace Mahjong
             for(int i = 0; i < poHand.Tiles.Count; i++)
             {
 
+                
                 if (IsPairDetected(poHand, i))
                 {
                     bHasPair = true;
-                    max = Math.Max(max, 1 + EvaluateShantenNormalHelper(RemovePairAtIndex(poHand, i), nBlocksLeft));
+                    Hand tempHand = poHand.Clone();
+                    max = Math.Max(max, 1 + EvaluateShantenNormalHelper(RemovePairAtIndex(tempHand, i), nBlocksLeft));
                 }
             }
             if (!bHasPair)
@@ -126,8 +128,8 @@ namespace Mahjong
             {
                 return false;
             }
-            Tile seqTile2 = poSortedHand.GetNextSequentialTile(currentTile);
-            Tile seqTile3 = poSortedHand.GetNextSequentialTile(seqTile2);
+            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
+            Tile seqTile3 = poSortedHand.GetNextSequentialTileInTheSameSuit(seqTile2);
             if (seqTile2 == null || seqTile3 == null)
             {
                 return false;
@@ -155,7 +157,7 @@ namespace Mahjong
             {
                 return false;
             }
-            Tile seqTile2 = poSortedHand.GetNextSequentialTile(currentTile);
+            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
             if (seqTile2 == null)
             {
                 return false;
@@ -184,8 +186,8 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            Tile seqTile2 = poSortedHand.GetNextSequentialTile(currentTile);
-            Tile seqTile3 = poSortedHand.GetNextSequentialTile(seqTile2);
+            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
+            Tile seqTile3 = poSortedHand.GetNextSequentialTileInTheSameSuit(seqTile2);
             poSortedHand.RemoveSingleTileOf(currentTile);
             poSortedHand.RemoveSingleTileOf(seqTile2);
             poSortedHand.RemoveSingleTileOf(seqTile3);
@@ -199,7 +201,7 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            Tile seqTile2 = poSortedHand.GetNextSequentialTile(currentTile);
+            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
             poSortedHand.RemoveSingleTileOf(currentTile);
             poSortedHand.RemoveSingleTileOf(seqTile2);
             return poSortedHand;

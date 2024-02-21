@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mahjong.Model
 {
-    class Block
+    public class Block
     {
         public List<Tile> Tiles = new List<Tile>();
         public Boolean isOpen = false;

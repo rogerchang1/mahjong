@@ -13,7 +13,7 @@ namespace Mahjong
         {
         }
 
-        public Hand parseHand(string psHand)
+        public Hand ParseHand(string psHand)
         {
             String currentSuit = "";
             Hand oHand = new Hand();
@@ -30,6 +30,21 @@ namespace Mahjong
                 }
             }
             return oHand;
+        }
+
+        public String ToString(Hand poHand)
+        {
+
+            poHand.SortTiles();
+
+            String sHand = "";
+
+            for (int i = 0; i < poHand.Tiles.Count;i++)
+            {
+
+                sHand += poHand.Tiles[i].ToString();
+            }
+            return sHand;
         }
     }
 }

@@ -6,5 +6,9 @@ namespace Mahjong
 {
     class CYakuEvaluator
     {
+        public Boolean IsPinfu()
+        {
+            return false;
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace Mahjong.Model
     public class Hand
     {
         public List<Tile> Tiles = new List<Tile>();
+        public List<Block> LockedBlocks = new List<Block>();
+        public Tile WinningTile = null;
 
         public void SortTiles()
         {
@@ -28,7 +30,7 @@ namespace Mahjong.Model
         }
 
         //please sort hand first
-        public Tile GetNextSequentialTile(Tile poTile)
+        public Tile GetNextSequentialTileInTheSameSuit(Tile poTile)
         {
             if(poTile == null)
             {
@@ -72,6 +74,67 @@ namespace Mahjong.Model
             return count;
         }
 
+        public Boolean CanBeStartOfARun(Tile poTile)
+        {
+            if (poTile == null)
+            {
+                return false;
+            }
+
+            SortTiles();
+
+            int index = FindFirstIndexOfTile(poTile);
+            
+            if (index == -1)
+            {
+                return false;
+            }
+
+            int divisor = 1;
+
+            switch (poTile.suit)
+            {
+                case "s":
+                    divisor = 10;
+                    break;
+                case "m":
+                    divisor = 100;
+                    break;
+                case "z":
+                    divisor = 1000;
+                    break;
+                default:
+                    break;
+            }
+
+            Tile o2ndTile = GetNextSequentialTileInTheSameSuit(poTile);
+
+            if(o2ndTile == null)
+            {
+                return false;
+            }
+
+            if(o2ndTile.CompareTo(poTile) / divisor != 1)
+            {
+                return false;
+            }
+
+            Tile o3rdTile = GetNextSequentialTileInTheSameSuit(o2ndTile);
+
+            if (o3rdTile == null)
+            {
+                return false;
+            }
+
+            if (o3rdTile.CompareTo(o2ndTile) / divisor != 1)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
         public void RemoveSingleTileOf(Tile poTileToRemove)
         {
             for (int i = 0; i < Tiles.Count; i++)
@@ -80,6 +143,25 @@ namespace Mahjong.Model
                 {
                     Tiles.RemoveAt(i);
                     break;
+                }
+            }
+        }
+
+        public void RemoveNumInstancesTileOf(Tile poTileToRemove, int nNumTimesToRemove)
+        {
+            int count = 0;
+            for (int i = 0; i < Tiles.Count; i++)
+            {
+                
+                if (poTileToRemove.CompareTo(Tiles[i]) == 0)
+                {
+                    Tiles.RemoveAt(i);
+                    i--;
+                    count++;
+                    if (count >= nNumTimesToRemove)
+                    {
+                        break;
+                    }
                 }
             }
         }
