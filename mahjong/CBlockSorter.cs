@@ -13,26 +13,35 @@ namespace Mahjong
         {
 
         }
-        
-        public List<List<Block>> GetBlockCombinations(Hand poHand)
+
+        //TODO:
+        //1. Kan
+        //2. Open Hands
+        //3. Kokushi Musou
+        public List<List<Block>> GetBlockCombinations(Hand pHand)
         {
             List<List<Block>> oBlockCombinations = new List<List<Block>>();
             List<Block> oBlockCombination = new List<Block>();
             CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
-            if(oShantenEvaluator.EvaluateShanten(poHand) != -1)
+            CHandManager oHandManager = new CHandManager();
+            if(oShantenEvaluator.EvaluateShanten(pHand) != -1)
             {
                 throw new BlockSortException();
             }
 
-            poHand.SortTiles();
+            Hand poHand = oHandManager.Clone(pHand); //Eventually should rename poHand to oTempHand or something to remove the open blocks from it before processin.
+            //Should remove open blocks from the hand before processing it over here or something.
 
-            List<Block> oPossiblePairs = GetListOfPossiblePairs(poHand);
+            //poHand.SortTiles();
+            oHandManager.SortTiles(poHand);
+
+            List<Block> oPossiblePairs = GetListOfPossiblePairBlocks(poHand);
 
             foreach(Block oPair in oPossiblePairs)
             {
-                Hand oTempHand = poHand.Clone();
-                
-                oTempHand.RemoveNumInstancesTileOf(oPair.Tiles[0], 2);
+                Hand oTempHand = oHandManager.Clone(poHand);
+
+                oHandManager.RemoveNumInstancesTileOf(oTempHand, oPair.Tiles[0], 2);
 
                 List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
                 if(oSubBlockCombinations != null)
@@ -53,16 +62,16 @@ namespace Mahjong
             {
                 return null;
             }
-
+            CHandManager oHandManager = new CHandManager();
             List<List<Block>> oBlockCombinations = new List<List<Block>>();
 
-            poHand.SortTiles();
+            oHandManager.SortTiles(poHand);
 
             if (poHand.Tiles.Count == 3 || poHand.Tiles.Count == 4)
             {
                 
-                int nNumberOfSameTiles = poHand.CountNumberOfTilesOf(poHand.Tiles[0]);
-                Boolean bIsStartOfAValidRun = poHand.CanBeStartOfARun(poHand.Tiles[0]);
+                int nNumberOfSameTiles = oHandManager.CountNumberOfTilesOf(poHand, poHand.Tiles[0]);
+                Boolean bIsStartOfAValidRun = oHandManager.CanBeStartOfARun(poHand, poHand.Tiles[0]);
                 if (nNumberOfSameTiles == 3 || nNumberOfSameTiles == 4 || bIsStartOfAValidRun)
                 {
                     List<Block> oBlockCombination = new List<Block>();
@@ -81,19 +90,19 @@ namespace Mahjong
                 }
             }
 
-
             Tile o1stTile = poHand.Tiles[0];
            
-            if(poHand.CountNumberOfTilesOf(o1stTile) == 3)
+            if(oHandManager.CountNumberOfTilesOf(poHand, o1stTile) == 3)
             {
-                Hand oTempHand = poHand.Clone();
+                Hand oTempHand = oHandManager.Clone(poHand);
                     
                 Block oBlock = new Block();
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Tiles.Add(o1stTile);
+                oBlock.Type = Enums.Mentsu.Koutsu;
 
-                oTempHand.RemoveNumInstancesTileOf(o1stTile, 3);
+                oHandManager.RemoveNumInstancesTileOf(oTempHand, o1stTile, 3);
 
                 List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
                 if (oSubBlockCombinations != null)
@@ -105,24 +114,22 @@ namespace Mahjong
                     }
 
                 }
-                
-
             }
-            if (poHand.CanBeStartOfARun(o1stTile))
+            if (oHandManager.CanBeStartOfARun(poHand, o1stTile))
             {
-                Hand oTempHand = poHand.Clone();
+                Hand oTempHand = oHandManager.Clone(poHand);
 
-                Tile o2ndTile = poHand.GetNextSequentialTileInTheSameSuit(o1stTile);
-                Tile o3rdTile = poHand.GetNextSequentialTileInTheSameSuit(o2ndTile);
+                Tile o2ndTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poHand, o1stTile);
+                Tile o3rdTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poHand, o2ndTile);
 
                 Block oBlock = new Block();
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Tiles.Add(o2ndTile);
                 oBlock.Tiles.Add(o3rdTile);
-
-                oTempHand.RemoveNumInstancesTileOf(o1stTile, 1);
-                oTempHand.RemoveNumInstancesTileOf(o2ndTile, 1);
-                oTempHand.RemoveNumInstancesTileOf(o3rdTile, 1);
+                oBlock.Type = Enums.Mentsu.Shuntsu;
+                oHandManager.RemoveNumInstancesTileOf(oTempHand, o1stTile, 1);
+                oHandManager.RemoveNumInstancesTileOf(oTempHand, o2ndTile, 1);
+                oHandManager.RemoveNumInstancesTileOf(oTempHand, o3rdTile, 1);
 
                 List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
                 if(oSubBlockCombinations != null)
@@ -140,40 +147,13 @@ namespace Mahjong
                 return null;
             }
 
-
             return oBlockCombinations;
         }
 
-        private Block ExtractRunWithStartingTile(Hand poHand, Tile poStartingTile)
-        {
-            Block oBlock = new Block();
-            Tile o2ndTile = new Tile(poStartingTile.CompareValue + 1);
-            Tile o3rdTile = new Tile(poStartingTile.CompareValue + 2);
-
-            if(poHand.FindFirstIndexOfTile(o2ndTile) == -1 || poHand.FindFirstIndexOfTile(o3rdTile) == -1)
-            {
-                return oBlock;
-            }
-
-            oBlock.Tiles.Add(poStartingTile);
-            oBlock.Tiles.Add(o2ndTile);
-            oBlock.Tiles.Add(o3rdTile);
-
-            return oBlock;
-        }
-
-        private Block ExtractPairWithTile(Hand poHand, Tile poTile)
-        {
-            Block oBlock = new Block();
-
-
-
-            return oBlock;
-        }
-
-        public List<Block> GetListOfPossiblePairs(Hand poHand)
+        public List<Block> GetListOfPossiblePairBlocks(Hand poHand)
         {
             List<Block> oBlockList = new List<Block>();
+            CHandManager oHandManager = new CHandManager();
 
             Tile oCurrentTile = null;
             for(int i = 0; i < poHand.Tiles.Count; i++)
@@ -185,73 +165,16 @@ namespace Mahjong
 
                 oCurrentTile = poHand.Tiles[i];
 
-                if (poHand.CountNumberOfTilesOf(oCurrentTile) >= 2)
+                if (oHandManager.CountNumberOfTilesOf(poHand, oCurrentTile) >= 2)
                 {
                     Block oBlock = new Block();
                     oBlock.Tiles.Add(oCurrentTile);
                     oBlock.Tiles.Add(oCurrentTile);
                     oBlockList.Add(oBlock);
+                    oBlock.Type = Enums.Mentsu.Jantou;
                 }
-
             }
             return oBlockList;
         }
-
-        private Block ExtractTripletWithTile(Hand poHand, Tile poTile)
-        {
-            Block oBlock = new Block();
-
-
-
-            return oBlock;
-        }
-
-        //public int EvaluateShantenNormalHelper(Hand poHand, int nBlocksLeft)
-        //{
-        //    if (poHand.Tiles.Count <= 1 || nBlocksLeft <= 0)
-        //    {
-        //        return 0;
-        //    }
-        //    int max = 0;
-        //    int i = 0;
-        //    while (i < poHand.Tiles.Count)
-        //    {
-        //        if (IsSequenceDetected(poHand, i) && nBlocksLeft > 0)
-        //        {
-        //            max += 2;
-        //            nBlocksLeft--;
-        //            RemoveSequenceAtIndex(poHand, i);
-        //            i--;
-        //        }
-        //        else if (IsTripletDetected(poHand, poHand.Tiles[i]) && nBlocksLeft > 0)
-        //        {
-        //            max += 2;
-        //            nBlocksLeft--;
-        //            RemoveTripletAtIndex(poHand, i);
-        //            i--;
-        //        }
-        //        i++;
-        //    }
-        //    i = 0;
-        //    while (i < poHand.Tiles.Count)
-        //    {
-        //        if (IsPartialSequenceDetected(poHand, i) && nBlocksLeft > 0)
-        //        {
-        //            max++;
-        //            nBlocksLeft--;
-        //            RemovePartialSequenceAtIndex(poHand, i);
-        //            i--;
-        //        }
-        //        else if (IsPairDetected(poHand, i) && nBlocksLeft > 0)
-        //        {
-        //            max++;
-        //            nBlocksLeft--;
-        //            RemovePairAtIndex(poHand, i);
-        //            i--;
-        //        }
-        //        i++;
-        //    }
-        //    return max;
-        //}
     }
 }

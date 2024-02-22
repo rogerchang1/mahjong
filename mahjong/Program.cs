@@ -12,11 +12,14 @@ namespace mahjong
             //Console.WriteLine("Enter a mahjong hand to parse:");
             //String sMahjongHand = "111133p445566s9m";
             //String sMahjongHand = "44455566677888p";
-            String sMahjongHand = "44445566777888p";
+            String sMahjongHand = "44445566999888p";
 
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand(sMahjongHand);
-            oHand.SortTiles();
+            //oHand.SortTiles();
+
+            CHandManager oHandManager = new CHandManager();
+            oHandManager.SortTiles(oHand);
 
             Console.WriteLine("Mahjong hand to evaluate: ");
             printList(oHand.Tiles);

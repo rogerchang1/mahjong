@@ -35,7 +35,7 @@ namespace Mahjong
         public String ToString(Hand poHand)
         {
 
-            poHand.SortTiles();
+            //poHand.SortTiles();
 
             String sHand = "";
 

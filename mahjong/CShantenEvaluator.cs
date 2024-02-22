@@ -7,17 +7,24 @@ namespace Mahjong
 {
     public class CShantenEvaluator
     {
+
+        private CHandManager _HandManager;
+
+        //TODO:
+        //1. Kan
+        //2. Open Hands
+        //3. Kokushi Musou
         public CShantenEvaluator()
         {
-
+            _HandManager = new CHandManager();
         }
 
         public int EvaluateShanten(Hand poHand)
         {
 
-            poHand.SortTiles();
-            int shantenNormal = 8 - EvaluateShantenNormal(poHand.Clone(), 4);
-            int shantenChiitoi = 6 - EvaluateShantenForChiitoi(poHand.Clone(), 7);
+            _HandManager.SortTiles(poHand);
+            int shantenNormal = 8 - EvaluateShantenNormal(_HandManager.Clone(poHand), 4);
+            int shantenChiitoi = 6 - EvaluateShantenForChiitoi(_HandManager.Clone(poHand), 7);
             return Math.Min(shantenNormal, shantenChiitoi);
         }
 
@@ -28,17 +35,16 @@ namespace Mahjong
                 return 0;
             }
 
+            CHandManager oHandManager = new CHandManager();
             bool bHasPair = false;
             int max = 0;
 
             for(int i = 0; i < poHand.Tiles.Count; i++)
             {
-
-                
                 if (IsPairDetected(poHand, i))
                 {
                     bHasPair = true;
-                    Hand tempHand = poHand.Clone();
+                    Hand tempHand = oHandManager.Clone(poHand);
                     max = Math.Max(max, 1 + EvaluateShantenNormalHelper(RemovePairAtIndex(tempHand, i), nBlocksLeft));
                 }
             }
@@ -110,7 +116,7 @@ namespace Mahjong
             {
                 if (IsPairDetected(poHand, i))
                 {
-                    poHand.RemoveAllTilesOf(poHand.Tiles[i]);
+                    _HandManager.RemoveAllTilesOf(poHand, poHand.Tiles[i]);
                     max = 1 + EvaluateShantenForChiitoi(poHand, nBlocksLeft - 1);
                 }
             }
@@ -128,8 +134,8 @@ namespace Mahjong
             {
                 return false;
             }
-            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
-            Tile seqTile3 = poSortedHand.GetNextSequentialTileInTheSameSuit(seqTile2);
+            Tile seqTile2 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, currentTile);
+            Tile seqTile3 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, seqTile2);
             if (seqTile2 == null || seqTile3 == null)
             {
                 return false;
@@ -143,7 +149,7 @@ namespace Mahjong
 
         private Boolean IsTripletDetected(Hand poSortedHand, Tile tile)
         {
-            return poSortedHand.CountNumberOfTilesOf(tile) >= 3;
+            return _HandManager.CountNumberOfTilesOf(poSortedHand, tile) >= 3;
         }
 
         private Boolean IsPartialSequenceDetected(Hand poSortedHand, int index)
@@ -157,7 +163,7 @@ namespace Mahjong
             {
                 return false;
             }
-            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
+            Tile seqTile2 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, currentTile);
             if (seqTile2 == null)
             {
                 return false;
@@ -176,7 +182,7 @@ namespace Mahjong
                 return false;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            return poSortedHand.CountNumberOfTilesOf(currentTile) >= 2;
+            return _HandManager.CountNumberOfTilesOf(poSortedHand, currentTile) >= 2;
         }
 
         private Hand RemoveSequenceAtIndex(Hand poSortedHand, int index)
@@ -186,11 +192,11 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
-            Tile seqTile3 = poSortedHand.GetNextSequentialTileInTheSameSuit(seqTile2);
-            poSortedHand.RemoveSingleTileOf(currentTile);
-            poSortedHand.RemoveSingleTileOf(seqTile2);
-            poSortedHand.RemoveSingleTileOf(seqTile3);
+            Tile seqTile2 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, currentTile);
+            Tile seqTile3 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, seqTile2);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, seqTile2);
+            _HandManager.RemoveSingleTileOf(poSortedHand, seqTile3);
             return poSortedHand;
         }
 
@@ -201,9 +207,9 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            Tile seqTile2 = poSortedHand.GetNextSequentialTileInTheSameSuit(currentTile);
-            poSortedHand.RemoveSingleTileOf(currentTile);
-            poSortedHand.RemoveSingleTileOf(seqTile2);
+            Tile seqTile2 = _HandManager.GetNextIncreasingTileInTheSameSuit(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, seqTile2);
             return poSortedHand;
         }
 
@@ -214,9 +220,9 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            poSortedHand.RemoveSingleTileOf(currentTile);
-            poSortedHand.RemoveSingleTileOf(currentTile);
-            poSortedHand.RemoveSingleTileOf(currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
             return poSortedHand;
         }
 
@@ -227,8 +233,8 @@ namespace Mahjong
                 return poSortedHand;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            poSortedHand.RemoveSingleTileOf(currentTile);
-            poSortedHand.RemoveSingleTileOf(currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
+            _HandManager.RemoveSingleTileOf(poSortedHand, currentTile);
             return poSortedHand;
         }
     }

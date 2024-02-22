@@ -17,27 +17,83 @@ namespace Mahjong.Test
         {
             _SUT = new CBlockSorter();
         }
-
+        #region GetBlockCombinations
         [DataTestMethod]
-        [DataRow("456s12333456p789m", -1)]
-        public void GetBlockCombinations(String psMahjongHand, int pnExpectedResult)
+        [DataRow("456p12333456s789m")]
+        public void GetBlockCombinations_ValidHand_ReturnsAListOfBlockCombinations(String psMahjongHand)
         {
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand(psMahjongHand);
-        }
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oHand);
 
+            Block oBlock1 = new Block();
+            oBlock1.Tiles.Add(new Tile("4p"));
+            oBlock1.Tiles.Add(new Tile("5p"));
+            oBlock1.Tiles.Add(new Tile("6p"));
+
+            Block oBlock2 = new Block();
+            oBlock2.Tiles.Add(new Tile("1s"));
+            oBlock2.Tiles.Add(new Tile("2s"));
+            oBlock2.Tiles.Add(new Tile("3s"));
+
+            Block oBlock3 = new Block();
+            oBlock3.Tiles.Add(new Tile("4s"));
+            oBlock3.Tiles.Add(new Tile("5s"));
+            oBlock3.Tiles.Add(new Tile("6s"));
+
+            Block oBlock4 = new Block();
+            oBlock4.Tiles.Add(new Tile("7m"));
+            oBlock4.Tiles.Add(new Tile("8m"));
+            oBlock4.Tiles.Add(new Tile("9m"));
+
+            Block oBlock5 = new Block();
+            oBlock5.Tiles.Add(new Tile("3s"));
+            oBlock5.Tiles.Add(new Tile("3s"));
+
+            List<Block> oExpectedBlockCombination = new List<Block>();
+            oExpectedBlockCombination.Add(oBlock1);
+            oExpectedBlockCombination.Add(oBlock2);
+            oExpectedBlockCombination.Add(oBlock3);
+            oExpectedBlockCombination.Add(oBlock4);
+            oExpectedBlockCombination.Add(oBlock5);
+
+            List<List<Block>> oExpectedBlockCombinations = new List<List<Block>>();
+            oExpectedBlockCombinations.Add(oExpectedBlockCombination);
+
+            Assert.AreEqual(oExpectedBlockCombinations.Count, oActualResults.Count);
+
+            for (int i = 0; i < oActualResults.Count; i++)
+            {
+                List<Block> oActualResult = oActualResults[i];
+                Assert.AreEqual(oExpectedBlockCombinations[i].Count, oActualResult.Count);
+                for(int j = 0; j < oActualResult.Count; j++)
+                {
+                    Block oActualBlock = oActualResult[j];
+                    Block oExpectedBlock = oExpectedBlockCombinations[i][j];
+                    for(int k = 0; k < oActualBlock.Tiles.Count; k++)
+                    {
+                        Assert.AreEqual(oExpectedBlock.Tiles[k].CompareValue, oActualBlock.Tiles[k].CompareValue);
+                    }
+                }
+            }
+
+        }
+        #endregion
+
+
+        #region GetListOfPossiblePairs
         [TestMethod]
         public void GetListOfPossiblePairs_HandHasOnePair_ReturnsListWithOneBlock()
         {
             String psMahjongHand = "456s12333456p789m";
-            
+
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<Block> oActualResult = _SUT.GetListOfPossiblePairs(oHand);
+            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oHand);
 
             CBlockParser oBlockParser = new CBlockParser();
 
-            for(int i = 0; i < oActualResult.Count; i++)
+            for (int i = 0; i < oActualResult.Count; i++)
             {
                 String sActualBlockResult = oBlockParser.ToString(oActualResult[i]);
                 Assert.AreEqual("3p3p", sActualBlockResult);
@@ -52,37 +108,74 @@ namespace Mahjong.Test
 
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<Block> oActualResult = _SUT.GetListOfPossiblePairs(oHand);
+            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oHand);
 
             CBlockParser oBlockParser = new CBlockParser();
 
-            for (int i = 0; i < oActualResult.Count; i++)
-            {
-                String sActualBlockResult = oBlockParser.ToString(oActualResult[i]);
-                Assert.AreEqual("3p3p", sActualBlockResult);
-                Assert.AreEqual("4s4s", sActualBlockResult);
-            }
-
+            Assert.AreEqual("4s4s", oBlockParser.ToString(oActualResult[0]));
+            Assert.AreEqual("3p3p", oBlockParser.ToString(oActualResult[1]));
         }
+        #endregion
 
+
+        #region GetBlockCombinationsWithNoPair
         [TestMethod]
-        public void GetBlockCombinationsWithNoPair()
+        public void GetBlockCombinationsWithNoPair_ValidHandWithNoPair_ReturnsBlockCombinations()
         {
-            //String psMahjongHand = "444567s123456p";
-            String psMahjongHand = "444555666s123p";
+            String psMahjongHand = "456p123456s789m";
 
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<List<Block>> oActualResult = _SUT.GetBlockCombinationsWithNoPair(oHand);
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinationsWithNoPair(oHand);
 
-            CBlockParser oBlockParser = new CBlockParser();
+            Block oBlock1 = new Block();
+            oBlock1.Tiles.Add(new Tile("4p"));
+            oBlock1.Tiles.Add(new Tile("5p"));
+            oBlock1.Tiles.Add(new Tile("6p"));
 
-            for (int i = 0; i < oActualResult.Count; i++)
+            Block oBlock2 = new Block();
+            oBlock2.Tiles.Add(new Tile("1s"));
+            oBlock2.Tiles.Add(new Tile("2s"));
+            oBlock2.Tiles.Add(new Tile("3s"));
+
+            Block oBlock3 = new Block();
+            oBlock3.Tiles.Add(new Tile("4s"));
+            oBlock3.Tiles.Add(new Tile("5s"));
+            oBlock3.Tiles.Add(new Tile("6s"));
+
+            Block oBlock4 = new Block();
+            oBlock4.Tiles.Add(new Tile("7m"));
+            oBlock4.Tiles.Add(new Tile("8m"));
+            oBlock4.Tiles.Add(new Tile("9m"));
+
+            List<Block> oExpectedBlockCombination = new List<Block>();
+            oExpectedBlockCombination.Add(oBlock1);
+            oExpectedBlockCombination.Add(oBlock2);
+            oExpectedBlockCombination.Add(oBlock3);
+            oExpectedBlockCombination.Add(oBlock4);
+
+            List<List<Block>> oExpectedBlockCombinations = new List<List<Block>>();
+            oExpectedBlockCombinations.Add(oExpectedBlockCombination);
+
+            Assert.AreEqual(oExpectedBlockCombinations.Count, oActualResults.Count);
+
+            for (int i = 0; i < oActualResults.Count; i++)
             {
-                //String sActualBlockResult = oBlockParser.ToString(oActualResult[i]);
-                
+                List<Block> oActualResult = oActualResults[i];
+                Assert.AreEqual(oExpectedBlockCombinations[i].Count, oActualResult.Count);
+                for (int j = 0; j < oActualResult.Count; j++)
+                {
+                    Block oActualBlock = oActualResult[j];
+                    Block oExpectedBlock = oExpectedBlockCombinations[i][j];
+                    for (int k = 0; k < oActualBlock.Tiles.Count; k++)
+                    {
+                        Assert.AreEqual(oExpectedBlock.Tiles[k].CompareValue, oActualBlock.Tiles[k].CompareValue);
+                    }
+                }
             }
 
         }
+        #endregion
+
     }
 }
