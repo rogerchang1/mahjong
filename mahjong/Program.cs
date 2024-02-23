@@ -13,17 +13,36 @@ namespace mahjong
             //String sMahjongHand = "111133p445566s9m";
             //String sMahjongHand = "44455566677888p";
             String sMahjongHand = "44555666777888p";
-
+            List<String> sCalledBlocks = new List<String>(){ "888p" };
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oHand = oHandParser.ParseTileStringToTileList(sMahjongHand);
+            CBlockParser oBlockParser = new CBlockParser();
+            Hand oHand = oHandParser.ParseHand(sMahjongHand);
+            
+
+            List<Tile> oHandTileList = oHandParser.ParseTileStringToTileList(sMahjongHand);
             //oHand.SortTiles();
 
             CTilesManager oHandManager = new CTilesManager();
-            oHandManager.SortTiles(oHand);
+            oHandManager.SortTiles(oHandTileList);
 
             Console.WriteLine("Mahjong hand to evaluate: ");
-            printList(oHand);
+            printList(oHandTileList);
             Console.WriteLine();
+
+            if (sCalledBlocks.Count > 0)
+            {
+                foreach(String sCalledBlock in sCalledBlocks)
+                {
+                    oHand.LockedBlocks.Add(oBlockParser.ParseBlock(sCalledBlock));
+                }
+                
+                Console.WriteLine("Called groups: ");
+                foreach(Block oBlock in oHand.LockedBlocks)
+                {
+                    printList(oBlock.Tiles);
+                }
+                Console.WriteLine();
+            }
 
             CShantenEvaluator shantenEvaluator = new CShantenEvaluator();
             int shanten = shantenEvaluator.EvaluateShanten(oHand);

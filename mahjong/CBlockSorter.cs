@@ -6,6 +6,9 @@ using static Mahjong.Enums;
 
 namespace Mahjong
 {
+    /// <summary>
+    /// This doesn't take into account of chiitoi and kokushi as they are special and they can only have a specific block combination
+    /// </summary>
     public class CBlockSorter
     {
         private CTilesManager _TilesManager;
@@ -16,24 +19,51 @@ namespace Mahjong
             _BlockParser = new CBlockParser();
         }
 
-        //TODO:
-        //1. Kan
-        //2. Open Hands
-        //3. Kokushi Musou
-        public List<List<Block>> GetBlockCombinations(List<Tile> pTilesList)
+
+        public List<List<Block>> GetBlockCombinations(Hand poHand)
         {
-            List<List<Block>> oBlockCombinations = new List<List<Block>>();
             CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
-            CTilesManager _TilesManager = new CTilesManager();
-            if (oShantenEvaluator.EvaluateShanten(pTilesList) != -1)
+            if (oShantenEvaluator.EvaluateShanten(poHand.Tiles) != -1)
             {
                 throw new BlockSortException();
             }
 
-            List<Tile> poTilesList = _TilesManager.Clone(pTilesList); //Eventually should rename poTilesList to oTempTilesList or something to remove the open blocks from it before processin.
-            //Should remove open blocks from the hand before processing it over here or something.
+            List<Tile> oTileList = _TilesManager.Clone(poHand.Tiles);
 
-            //poTilesList.SortTiles();
+            List<Block> oLockedBlockList = new List<Block>();
+
+            for (int i = 0; i < poHand.LockedBlocks.Count; i++)
+            {
+                Block oBlock = poHand.LockedBlocks[i];
+                for (int j = 0; j < oBlock.Tiles.Count; j++)
+                {
+                    _TilesManager.RemoveSingleTileOf(oTileList, oBlock.Tiles[j]);
+                }
+                oLockedBlockList.Add(oBlock);
+            }
+            List<List<Block>> oBlockCombinations = GetBlockCombinations(oTileList);
+
+            if(oLockedBlockList.Count > 0)
+            {
+                foreach(List<Block> oBlockCombination in oBlockCombinations)
+                {
+                    foreach (Block oLockedBlock in oLockedBlockList)
+                    {
+                        oBlockCombination.Add(oLockedBlock);
+                    }
+                }
+            }
+            return oBlockCombinations;
+        }
+
+        //TODO:
+        //1. Kan
+        //2. Open Hands
+        //3. Kokushi Musou
+        public List<List<Block>> GetBlockCombinations(List<Tile> poTilesList)
+        {
+            List<List<Block>> oBlockCombinations = new List<List<Block>>();            
+
             _TilesManager.SortTiles(poTilesList);
 
             List<Block> oPossiblePairs = GetListOfPossiblePairBlocks(poTilesList);

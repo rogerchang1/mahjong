@@ -10,13 +10,63 @@ namespace Mahjong.Test
     {
 
         private CBlockSorter _SUT;
+        private CHandParser _HandParser;
+        private CBlockParser _BlockParser;
 
         [TestInitialize]
         public void SetUp()
         {
             _SUT = new CBlockSorter();
+            _HandParser = new CHandParser();
+            _BlockParser = new CBlockParser();
         }
-        #region GetBlockCombinations
+
+        #region GetBlockCombinationsWithHand
+        [DataTestMethod]
+        [DataRow("123p456s11345789m", "789m")]
+        public void GetBlockCombinations_ValidHandWith1LockedBlock_ReturnsAListOfBlockCombinations(String psMahjongHand, String psLockedBlock)
+        {
+            Hand oHand = new Hand();
+            oHand.Tiles = _HandParser.ParseTileStringToTileList(psMahjongHand);
+            oHand.LockedBlocks.Add(_BlockParser.ParseBlock(psLockedBlock));
+
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oHand);
+            Block oBlock1 = _BlockParser.ParseBlock("123p");
+            Block oBlock2 = _BlockParser.ParseBlock("456s");
+            Block oBlock3 = _BlockParser.ParseBlock("345m");
+            Block oBlock4 = _BlockParser.ParseBlock("11m");
+            Block oBlock5 = _BlockParser.ParseBlock("789m");
+
+            List<Block> oExpectedBlockCombination = new List<Block>();
+            oExpectedBlockCombination.Add(oBlock1);
+            oExpectedBlockCombination.Add(oBlock2);
+            oExpectedBlockCombination.Add(oBlock3);
+            oExpectedBlockCombination.Add(oBlock4);
+            oExpectedBlockCombination.Add(oBlock5);
+
+            List<List<Block>> oExpectedBlockCombinations = new List<List<Block>>();
+            oExpectedBlockCombinations.Add(oExpectedBlockCombination);
+
+            Assert.AreEqual(oExpectedBlockCombinations.Count, oActualResults.Count);
+
+            for (int i = 0; i < oActualResults.Count; i++)
+            {
+                List<Block> oActualResult = oActualResults[i];
+                Assert.AreEqual(oExpectedBlockCombinations[i].Count, oActualResult.Count);
+                for (int j = 0; j < oActualResult.Count; j++)
+                {
+                    Block oActualBlock = oActualResult[j];
+                    Block oExpectedBlock = oExpectedBlockCombinations[i][j];
+                    for (int k = 0; k < oActualBlock.Tiles.Count; k++)
+                    {
+                        Assert.AreEqual(oExpectedBlock.Tiles[k].CompareValue, oActualBlock.Tiles[k].CompareValue);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region GetBlockCombinationsTileList
         [DataTestMethod]
         [DataRow("456p12333456s789m")]
         public void GetBlockCombinations_ValidHand_ReturnsAListOfBlockCombinations(String psMahjongHand)
@@ -25,29 +75,12 @@ namespace Mahjong.Test
             List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oTilesList);
 
-            Block oBlock1 = new Block();
-            oBlock1.Tiles.Add(new Tile("4p"));
-            oBlock1.Tiles.Add(new Tile("5p"));
-            oBlock1.Tiles.Add(new Tile("6p"));
 
-            Block oBlock2 = new Block();
-            oBlock2.Tiles.Add(new Tile("1s"));
-            oBlock2.Tiles.Add(new Tile("2s"));
-            oBlock2.Tiles.Add(new Tile("3s"));
-
-            Block oBlock3 = new Block();
-            oBlock3.Tiles.Add(new Tile("4s"));
-            oBlock3.Tiles.Add(new Tile("5s"));
-            oBlock3.Tiles.Add(new Tile("6s"));
-
-            Block oBlock4 = new Block();
-            oBlock4.Tiles.Add(new Tile("7m"));
-            oBlock4.Tiles.Add(new Tile("8m"));
-            oBlock4.Tiles.Add(new Tile("9m"));
-
-            Block oBlock5 = new Block();
-            oBlock5.Tiles.Add(new Tile("3s"));
-            oBlock5.Tiles.Add(new Tile("3s"));
+            Block oBlock1 = _BlockParser.ParseBlock("456p");
+            Block oBlock2 = _BlockParser.ParseBlock("123s");
+            Block oBlock3 = _BlockParser.ParseBlock("456s");
+            Block oBlock4 = _BlockParser.ParseBlock("789m");
+            Block oBlock5 = _BlockParser.ParseBlock("33s");
 
             List<Block> oExpectedBlockCombination = new List<Block>();
             oExpectedBlockCombination.Add(oBlock1);
@@ -78,7 +111,6 @@ namespace Mahjong.Test
 
         }
         #endregion
-
 
         #region GetListOfPossiblePairs
         [TestMethod]
@@ -127,25 +159,10 @@ namespace Mahjong.Test
             List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             List<List<Block>> oActualResults = _SUT.GetBlockCombinationsWithNoPair(oTilesList);
 
-            Block oBlock1 = new Block();
-            oBlock1.Tiles.Add(new Tile("4p"));
-            oBlock1.Tiles.Add(new Tile("5p"));
-            oBlock1.Tiles.Add(new Tile("6p"));
-
-            Block oBlock2 = new Block();
-            oBlock2.Tiles.Add(new Tile("1s"));
-            oBlock2.Tiles.Add(new Tile("2s"));
-            oBlock2.Tiles.Add(new Tile("3s"));
-
-            Block oBlock3 = new Block();
-            oBlock3.Tiles.Add(new Tile("4s"));
-            oBlock3.Tiles.Add(new Tile("5s"));
-            oBlock3.Tiles.Add(new Tile("6s"));
-
-            Block oBlock4 = new Block();
-            oBlock4.Tiles.Add(new Tile("7m"));
-            oBlock4.Tiles.Add(new Tile("8m"));
-            oBlock4.Tiles.Add(new Tile("9m"));
+            Block oBlock1 = _BlockParser.ParseBlock("456p");
+            Block oBlock2 = _BlockParser.ParseBlock("123s");
+            Block oBlock3 = _BlockParser.ParseBlock("456s");
+            Block oBlock4 = _BlockParser.ParseBlock("789m");
 
             List<Block> oExpectedBlockCombination = new List<Block>();
             oExpectedBlockCombination.Add(oBlock1);
