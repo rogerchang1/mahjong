@@ -8,6 +8,7 @@ namespace Mahjong
     {
 
         private CTilesManager _TilesManager;
+        private CHandParser _HandParser;
 
         //TODO:
         //1. Kan
@@ -16,6 +17,7 @@ namespace Mahjong
         public CShantenEvaluator()
         {
             _TilesManager = new CTilesManager();
+            _HandParser = new CHandParser();
         }
 
         public int EvaluateShanten(List<Tile> poTilesList)
@@ -24,7 +26,8 @@ namespace Mahjong
             _TilesManager.SortTiles(poTilesList);
             int shantenNormal = 8 - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), 4);
             int shantenChiitoi = 6 - EvaluateShantenForChiitoi(_TilesManager.Clone(poTilesList), 7);
-            return Math.Min(shantenNormal, shantenChiitoi);
+            int shantenKokushi = 13 - EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
+            return Math.Min(shantenNormal, Math.Min(shantenChiitoi, shantenKokushi));
         }
 
         public int EvaluateShantenNormal(List<Tile> poTilesList, int nBlocksLeft)
@@ -117,6 +120,34 @@ namespace Mahjong
                 {
                     _TilesManager.RemoveAllTilesOf(poTilesList, poTilesList[i]);
                     max = 1 + EvaluateShantenForChiitoi(poTilesList, nBlocksLeft - 1);
+                }
+            }
+            return max;
+        }
+
+        public int EvaluateShantenForKokushiMusou(List<Tile> poTilesList)
+        {
+            if (poTilesList.Count == 0)
+            {
+                return 0;
+            }
+
+            int max = 0;
+            Boolean bPairFound = false;
+
+            List<Tile> oKokushiTileList = _HandParser.ParseTileStringToTileList("19p19s19m1234567z");
+
+            for(int i = 0; i < oKokushiTileList.Count; i++)
+            {
+                int nNumTiles = _TilesManager.CountNumberOfTilesOf(poTilesList, oKokushiTileList[i]);
+                if(nNumTiles > 0)
+                {
+                    max++;
+                }
+                if(bPairFound == false && nNumTiles > 1)
+                {
+                    max++;
+                    bPairFound = true;
                 }
             }
             return max;

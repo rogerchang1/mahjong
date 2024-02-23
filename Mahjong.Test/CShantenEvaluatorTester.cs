@@ -30,8 +30,11 @@ namespace Mahjong.Test
         [DataRow("46s11222333p789m", 0)]
         [DataRow("456s11222333p789m", -1)]
         [DataRow("111333p445566s99m", -1)]
-        [DataRow("115588m147p2588s", 2)]
-        [DataRow("112233m668899p4z", 0)]
+        [DataRow("115588m147p2588s", 2)] //chiitoi
+        [DataRow("112233m668899p4z", 0)] //chiitoi
+        [DataRow("19p19s15m1234567z", 1)] //kokushi
+        [DataRow("19p19s19m1234567z", 0)] //kokushi
+        [DataRow("19p19s1m12344567z", 0)] //kokushi
         public void EvaluateShanten_ReceiveValidAHandStringArgument_GivesMinimumShanten(String psMahjongHand, int pnExpectedResult)
         {
             CHandParser oHandParser = new CHandParser();

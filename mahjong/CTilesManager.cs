@@ -88,6 +88,28 @@ namespace Mahjong
             return count;
         }
 
+        public int CountNumberOfTilesOf(List<Tile> poTilesList, String psTile)
+        {
+            if (psTile == "")
+            {
+                return 0;
+            }
+
+            Tile oTile = new Tile(psTile);
+
+            int count = 0;
+
+            for (int i = 0; i < poTilesList.Count; i++)
+            {
+                if (poTilesList[i].CompareTo(oTile) == 0)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
         public Boolean CanBeStartOfARun(List<Tile> poTilesList, Tile poTile)
         {
             if (poTile == null)
