@@ -17,32 +17,32 @@ namespace Mahjong
         //1. Kan
         //2. Open Hands
         //3. Kokushi Musou
-        public List<List<Block>> GetBlockCombinations(Hand pHand)
+        public List<List<Block>> GetBlockCombinations(List<Tile> pTilesList)
         {
             List<List<Block>> oBlockCombinations = new List<List<Block>>();
             List<Block> oBlockCombination = new List<Block>();
             CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
-            CHandManager oHandManager = new CHandManager();
-            if (oShantenEvaluator.EvaluateShanten(pHand) != -1)
+            CTilesManager oHandManager = new CTilesManager();
+            if (oShantenEvaluator.EvaluateShanten(pTilesList) != -1)
             {
                 throw new BlockSortException();
             }
 
-            Hand poHand = oHandManager.Clone(pHand); //Eventually should rename poHand to oTempHand or something to remove the open blocks from it before processin.
+            List<Tile> poTilesList = oHandManager.Clone(pTilesList); //Eventually should rename poTilesList to oTempTilesList or something to remove the open blocks from it before processin.
             //Should remove open blocks from the hand before processing it over here or something.
 
-            //poHand.SortTiles();
-            oHandManager.SortTiles(poHand);
+            //poTilesList.SortTiles();
+            oHandManager.SortTiles(poTilesList);
 
-            List<Block> oPossiblePairs = GetListOfPossiblePairBlocks(poHand);
+            List<Block> oPossiblePairs = GetListOfPossiblePairBlocks(poTilesList);
 
             foreach (Block oPair in oPossiblePairs)
             {
-                Hand oTempHand = oHandManager.Clone(poHand);
+                List<Tile> oTempTilesList = oHandManager.Clone(poTilesList);
 
-                oHandManager.RemoveNumInstancesTileOf(oTempHand, oPair.Tiles[0], 2);
+                oHandManager.RemoveNumInstancesTileOf(oTempTilesList, oPair.Tiles[0], 2);
 
-                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
+                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempTilesList);
                 if (oSubBlockCombinations != null)
                 {
                     foreach (List<Block> oSubBlockCombination in oSubBlockCombinations)
@@ -55,29 +55,29 @@ namespace Mahjong
             return oBlockCombinations;
         }
 
-        public List<List<Block>> GetBlockCombinationsWithNoPair(Hand poHand)
+        public List<List<Block>> GetBlockCombinationsWithNoPair(List<Tile> poTilesList)
         {
-            if (poHand.Tiles.Count < 3)
+            if (poTilesList.Count < 3)
             {
                 return null;
             }
-            CHandManager oHandManager = new CHandManager();
+            CTilesManager oHandManager = new CTilesManager();
             List<List<Block>> oBlockCombinations = new List<List<Block>>();
 
-            oHandManager.SortTiles(poHand);
+            oHandManager.SortTiles(poTilesList);
 
-            if (poHand.Tiles.Count == 3 || poHand.Tiles.Count == 4)
+            if (poTilesList.Count == 3 || poTilesList.Count == 4)
             {
 
-                int nNumberOfSameTiles = oHandManager.CountNumberOfTilesOf(poHand, poHand.Tiles[0]);
-                Boolean bIsStartOfAValidRun = oHandManager.CanBeStartOfARun(poHand, poHand.Tiles[0]);
+                int nNumberOfSameTiles = oHandManager.CountNumberOfTilesOf(poTilesList, poTilesList[0]);
+                Boolean bIsStartOfAValidRun = oHandManager.CanBeStartOfARun(poTilesList, poTilesList[0]);
                 if (nNumberOfSameTiles == 3 || nNumberOfSameTiles == 4 || bIsStartOfAValidRun)
                 {
                     List<Block> oBlockCombination = new List<Block>();
                     Block oBlock = new Block();
-                    for (int i = 0; i < poHand.Tiles.Count; i++)
+                    for (int i = 0; i < poTilesList.Count; i++)
                     {
-                        oBlock.Tiles.Add(poHand.Tiles[i]);
+                        oBlock.Tiles.Add(poTilesList[i]);
                     }
                     oBlockCombination.Insert(0, oBlock);
                     oBlockCombinations.Insert(0, oBlockCombination);
@@ -89,11 +89,11 @@ namespace Mahjong
                 }
             }
 
-            Tile o1stTile = poHand.Tiles[0];
+            Tile o1stTile = poTilesList[0];
 
-            if (oHandManager.CountNumberOfTilesOf(poHand, o1stTile) == 3)
+            if (oHandManager.CountNumberOfTilesOf(poTilesList, o1stTile) == 3)
             {
-                Hand oTempHand = oHandManager.Clone(poHand);
+                List<Tile> oTempTilesList = oHandManager.Clone(poTilesList);
 
                 Block oBlock = new Block();
                 oBlock.Tiles.Add(o1stTile);
@@ -101,9 +101,9 @@ namespace Mahjong
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Type = Enums.Mentsu.Koutsu;
 
-                oHandManager.RemoveNumInstancesTileOf(oTempHand, o1stTile, 3);
+                oHandManager.RemoveNumInstancesTileOf(oTempTilesList, o1stTile, 3);
 
-                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
+                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempTilesList);
                 if (oSubBlockCombinations != null)
                 {
                     foreach (List<Block> oListBlock in oSubBlockCombinations)
@@ -114,23 +114,23 @@ namespace Mahjong
 
                 }
             }
-            if (oHandManager.CanBeStartOfARun(poHand, o1stTile))
+            if (oHandManager.CanBeStartOfARun(poTilesList, o1stTile))
             {
-                Hand oTempHand = oHandManager.Clone(poHand);
+                List<Tile> oTempTilesList = oHandManager.Clone(poTilesList);
 
-                Tile o2ndTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poHand, o1stTile);
-                Tile o3rdTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poHand, o2ndTile);
+                Tile o2ndTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poTilesList, o1stTile);
+                Tile o3rdTile = oHandManager.GetNextIncreasingTileInTheSameSuit(poTilesList, o2ndTile);
 
                 Block oBlock = new Block();
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Tiles.Add(o2ndTile);
                 oBlock.Tiles.Add(o3rdTile);
                 oBlock.Type = Enums.Mentsu.Shuntsu;
-                oHandManager.RemoveNumInstancesTileOf(oTempHand, o1stTile, 1);
-                oHandManager.RemoveNumInstancesTileOf(oTempHand, o2ndTile, 1);
-                oHandManager.RemoveNumInstancesTileOf(oTempHand, o3rdTile, 1);
+                oHandManager.RemoveNumInstancesTileOf(oTempTilesList, o1stTile, 1);
+                oHandManager.RemoveNumInstancesTileOf(oTempTilesList, o2ndTile, 1);
+                oHandManager.RemoveNumInstancesTileOf(oTempTilesList, o3rdTile, 1);
 
-                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
+                List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempTilesList);
                 if (oSubBlockCombinations != null)
                 {
                     foreach (List<Block> oListBlock in oSubBlockCombinations)
@@ -149,22 +149,22 @@ namespace Mahjong
             return oBlockCombinations;
         }
 
-        public List<Block> GetListOfPossiblePairBlocks(Hand poHand)
+        public List<Block> GetListOfPossiblePairBlocks(List<Tile> poTilesList)
         {
             List<Block> oBlockList = new List<Block>();
-            CHandManager oHandManager = new CHandManager();
+            CTilesManager oHandManager = new CTilesManager();
 
             Tile oCurrentTile = null;
-            for (int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poTilesList.Count; i++)
             {
-                if (oCurrentTile != null && oCurrentTile.CompareTo(poHand.Tiles[i]) == 0)
+                if (oCurrentTile != null && oCurrentTile.CompareTo(poTilesList[i]) == 0)
                 {
                     continue;
                 }
 
-                oCurrentTile = poHand.Tiles[i];
+                oCurrentTile = poTilesList[i];
 
-                if (oHandManager.CountNumberOfTilesOf(poHand, oCurrentTile) >= 2)
+                if (oHandManager.CountNumberOfTilesOf(poTilesList, oCurrentTile) >= 2)
                 {
                     Block oBlock = new Block();
                     oBlock.Tiles.Add(oCurrentTile);

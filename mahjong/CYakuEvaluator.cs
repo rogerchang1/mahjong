@@ -19,12 +19,12 @@ namespace Mahjong
         {
             List<List<String>> oYakuCombinations = new List<List<String>>();
 
-            if (_ShantenEvaluator.EvaluateShanten(poHand) != -1)
+            if (_ShantenEvaluator.EvaluateShanten(poHand.Tiles) != -1)
             {
                 return oYakuCombinations;
             }
 
-            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand);
+            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand.Tiles);
 
             foreach (List<Block> oBlockCombination in oBlockCombinations)
             {
@@ -49,11 +49,11 @@ namespace Mahjong
 
         public Boolean IsPinfu(Hand poHand, List<Block> poBlockCombination)
         {
-            if(poHand.LockedBlocks.Count > 0)
+            if (poHand.LockedBlocks.Count > 0)
             {
                 return false;
             }
-            
+
             for (int i = 0; i < poBlockCombination.Count; i++)
             {
                 Block oBlock = poBlockCombination[i];
@@ -70,7 +70,7 @@ namespace Mahjong
 
         public Boolean IsTanyao(List<Block> poBlockCombination)
         {
-           for (int i = 0; i < poBlockCombination.Count; i++)
+            for (int i = 0; i < poBlockCombination.Count; i++)
             {
                 Block oBlock = poBlockCombination[i];
                 for (int j = 0; j < oBlock.Tiles.Count; j++)

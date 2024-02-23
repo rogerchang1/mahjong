@@ -1,33 +1,34 @@
 ﻿using Mahjong.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Mahjong
 {
-    public class CHandManager
+    public class CTilesManager
     {
 
-        public CHandManager()
+        public CTilesManager()
         {
 
         }
 
-        public void SortTiles(Hand poHand)
+        public void SortTiles(List<Tile> poTilesList)
         {
-            poHand.Tiles.Sort(delegate (Tile t1, Tile t2) { return t1.CompareTo(t2); });
+            poTilesList.Sort(delegate (Tile t1, Tile t2) { return t1.CompareTo(t2); });
         }
 
         /// <summary>
         /// Best used in conjunction with SortTiles() for finding sequential tiles.
         /// </summary>
-        /// <param name="poHand"></param>
+        /// <param name="poTilesList"></param>
         /// <param name="poTile"></param>
         /// <returns></returns>
-        public int FindFirstIndexOfTile(Hand poHand, Tile poTile)
+        public int FindFirstIndexOfTile(List<Tile> poTilesList, Tile poTile)
         {
-            for (int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poTilesList.Count; i++)
             {
-                if (poTile.CompareTo(poHand.Tiles[i]) == 0)
+                if (poTile.CompareTo(poTilesList[i]) == 0)
                 {
                     return i;
                 }
@@ -39,35 +40,35 @@ namespace Mahjong
         /// Gets the next tile in the hand of the same suit. 
         /// For example, GetNextIncreasingTileInTheSameSuit("1278s",1s") = 2s, GetNextIncreasingTileInTheSameSuit("1278s",2s") = 7s, GetNextIncreasingTileInTheSameSuit("1278s",8s") = null
         /// </summary>
-        /// <param name="poHand"></param>
+        /// <param name="poTilesList"></param>
         /// <param name="poTile"></param>
         /// <returns></returns>
-        public Tile GetNextIncreasingTileInTheSameSuit(Hand poHand, Tile poTile)
+        public Tile GetNextIncreasingTileInTheSameSuit(List<Tile> poTilesList, Tile poTile)
         {
             if (poTile == null)
             {
                 return null;
             }
 
-            SortTiles(poHand);
+            SortTiles(poTilesList);
 
-            int index = FindFirstIndexOfTile(poHand, poTile);
+            int index = FindFirstIndexOfTile(poTilesList, poTile);
             if (index == -1)
             {
                 return null;
             }
-            for (int i = index + 1; i < poHand.Tiles.Count; i++)
+            for (int i = index + 1; i < poTilesList.Count; i++)
             {
-                if (poHand.Tiles[i].num != poHand.Tiles[index].num && poHand.Tiles[i].suit == poHand.Tiles[index].suit)
+                if (poTilesList[i].num != poTilesList[index].num && poTilesList[i].suit == poTilesList[index].suit)
                 {
-                    return poHand.Tiles[i];
+                    return poTilesList[i];
                 }
             }
             return null;
         }
 
 
-        public int CountNumberOfTilesOf(Hand poHand, Tile poTile)
+        public int CountNumberOfTilesOf(List<Tile> poTilesList, Tile poTile)
         {
             if (poTile == null)
             {
@@ -76,9 +77,9 @@ namespace Mahjong
 
             int count = 0;
 
-            for (int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poTilesList.Count; i++)
             {
-                if (poHand.Tiles[i].CompareTo(poTile) == 0)
+                if (poTilesList[i].CompareTo(poTile) == 0)
                 {
                     count++;
                 }
@@ -87,7 +88,7 @@ namespace Mahjong
             return count;
         }
 
-        public Boolean CanBeStartOfARun(Hand poHand, Tile poTile)
+        public Boolean CanBeStartOfARun(List<Tile> poTilesList, Tile poTile)
         {
             if (poTile == null)
             {
@@ -99,9 +100,9 @@ namespace Mahjong
                 return false;
             }
 
-            SortTiles(poHand);
+            SortTiles(poTilesList);
 
-            int index = FindFirstIndexOfTile(poHand, poTile);
+            int index = FindFirstIndexOfTile(poTilesList, poTile);
 
             if (index == -1)
             {
@@ -125,7 +126,7 @@ namespace Mahjong
                     break;
             }
 
-            Tile o2ndTile = GetNextIncreasingTileInTheSameSuit(poHand, poTile);
+            Tile o2ndTile = GetNextIncreasingTileInTheSameSuit(poTilesList, poTile);
 
             if (o2ndTile == null)
             {
@@ -137,7 +138,7 @@ namespace Mahjong
                 return false;
             }
 
-            Tile o3rdTile = GetNextIncreasingTileInTheSameSuit(poHand, o2ndTile);
+            Tile o3rdTile = GetNextIncreasingTileInTheSameSuit(poTilesList, o2ndTile);
 
             if (o3rdTile == null)
             {
@@ -153,19 +154,19 @@ namespace Mahjong
 
         }
 
-        public void RemoveSingleTileOf(Hand poHand, Tile poTileToRemove)
+        public void RemoveSingleTileOf(List<Tile> poTilesList, Tile poTileToRemove)
         {
-            RemoveNumInstancesTileOf(poHand, poTileToRemove, 1);
+            RemoveNumInstancesTileOf(poTilesList, poTileToRemove, 1);
         }
 
-        public void RemoveNumInstancesTileOf(Hand poHand, Tile poTileToRemove, int nNumTimesToRemove)
+        public void RemoveNumInstancesTileOf(List<Tile> poTilesList, Tile poTileToRemove, int nNumTimesToRemove)
         {
             int count = 0;
-            for (int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poTilesList.Count; i++)
             {
-                if (poTileToRemove.CompareTo(poHand.Tiles[i]) == 0)
+                if (poTileToRemove.CompareTo(poTilesList[i]) == 0)
                 {
-                    poHand.Tiles.RemoveAt(i);
+                    poTilesList.RemoveAt(i);
                     i--;
                     count++;
                     if (count >= nNumTimesToRemove)
@@ -176,22 +177,22 @@ namespace Mahjong
             }
         }
 
-        public void RemoveAllTilesOf(Hand poHand, Tile poTileToRemove)
+        public void RemoveAllTilesOf(List<Tile> poTilesList, Tile poTileToRemove)
         {
-            for (int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poTilesList.Count; i++)
             {
-                if (poTileToRemove.CompareTo(poHand.Tiles[i]) == 0)
+                if (poTileToRemove.CompareTo(poTilesList[i]) == 0)
                 {
-                    poHand.Tiles.RemoveAt(i);
+                    poTilesList.RemoveAt(i);
                     i--;
                 }
             }
         }
 
-        public Hand Clone(Hand poHand)
+        public List<Tile> Clone(List<Tile> poTilesList)
         {
-            Hand oHand = new Hand();
-            oHand.Tiles = poHand.Tiles.ToList();
+            List<Tile> oHand = new List<Tile>();
+            oHand = poTilesList.ToList();
             return oHand;
         }
     }

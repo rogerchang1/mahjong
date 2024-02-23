@@ -1,5 +1,6 @@
 ﻿using Mahjong.Model;
 using System;
+using System.Collections.Generic;
 
 namespace Mahjong
 {
@@ -20,6 +21,25 @@ namespace Mahjong
                 if (Char.IsDigit(psHand[i]))
                 {
                     oHand.Tiles.Insert(0, new Tile(psHand[i] - '0', currentSuit));
+                }
+                else
+                {
+                    currentSuit = psHand[i].ToString().ToLower();
+                }
+            }
+            return oHand;
+        }
+
+        public List<Tile> ParseHandToTileList(string psHand)
+        {
+            String currentSuit = "";
+            List<Tile> oHand = new List<Tile>();
+            for (int i = psHand.Length - 1; i >= 0; i--)
+            {
+
+                if (Char.IsDigit(psHand[i]))
+                {
+                    oHand.Insert(0, new Tile(psHand[i] - '0', currentSuit));
                 }
                 else
                 {

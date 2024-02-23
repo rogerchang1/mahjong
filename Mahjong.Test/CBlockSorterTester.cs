@@ -22,8 +22,8 @@ namespace Mahjong.Test
         public void GetBlockCombinations_ValidHand_ReturnsAListOfBlockCombinations(String psMahjongHand)
         {
             CHandParser oHandParser = new CHandParser();
-            Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oHand);
+            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oTilesList);
 
             Block oBlock1 = new Block();
             oBlock1.Tiles.Add(new Tile("4p"));
@@ -87,8 +87,8 @@ namespace Mahjong.Test
             String psMahjongHand = "456s12333456p789m";
 
             CHandParser oHandParser = new CHandParser();
-            Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oHand);
+            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oTilesList);
 
             CBlockParser oBlockParser = new CBlockParser();
 
@@ -106,8 +106,8 @@ namespace Mahjong.Test
             String psMahjongHand = "444567s12333456p";
 
             CHandParser oHandParser = new CHandParser();
-            Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oHand);
+            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Block> oActualResult = _SUT.GetListOfPossiblePairBlocks(oTilesList);
 
             CBlockParser oBlockParser = new CBlockParser();
 
@@ -124,8 +124,8 @@ namespace Mahjong.Test
             String psMahjongHand = "456p123456s789m";
 
             CHandParser oHandParser = new CHandParser();
-            Hand oHand = oHandParser.ParseHand(psMahjongHand);
-            List<List<Block>> oActualResults = _SUT.GetBlockCombinationsWithNoPair(oHand);
+            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinationsWithNoPair(oTilesList);
 
             Block oBlock1 = new Block();
             oBlock1.Tiles.Add(new Tile("4p"));

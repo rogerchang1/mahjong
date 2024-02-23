@@ -1,6 +1,7 @@
 using Mahjong.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace Mahjong.Test
 {
@@ -34,9 +35,9 @@ namespace Mahjong.Test
         public void EvaluateShanten_ReceiveValidAHandStringArgument_GivesMinimumShanten(String psMahjongHand, int pnExpectedResult)
         {
             CHandParser oHandParser = new CHandParser();
-            Hand oHand = oHandParser.ParseHand(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
 
-            int shanten = _SUT.EvaluateShanten(oHand);
+            int shanten = _SUT.EvaluateShanten(oTilesList);
             Assert.AreEqual(pnExpectedResult, shanten);
         }
     }
