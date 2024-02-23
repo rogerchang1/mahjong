@@ -10,11 +10,15 @@ namespace Mahjong.Test
     {
 
         private CShantenEvaluator _SUT;
+        private CHandParser _HandParser;
+        private CBlockParser _BlockParser;
 
         [TestInitialize]
         public void SetUp()
         {
             _SUT = new CShantenEvaluator();
+            _HandParser = new CHandParser();
+            _BlockParser = new CBlockParser();
         }
 
         [DataTestMethod]
@@ -35,12 +39,23 @@ namespace Mahjong.Test
         [DataRow("19p19s15m1234567z", 1)] //kokushi
         [DataRow("19p19s19m1234567z", 0)] //kokushi
         [DataRow("19p19s1m12344567z", 0)] //kokushi
-        public void EvaluateShanten_ReceiveValidAHandStringArgument_GivesMinimumShanten(String psMahjongHand, int pnExpectedResult)
+        public void EvaluateShanten_ReceiveValidATileListArgument_GivesMinimumShanten(String psMahjongHand, int pnExpectedResult)
         {
-            CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
+            List<Tile> oTilesList = _HandParser.ParseTileStringToTileList(psMahjongHand);
 
             int shanten = _SUT.EvaluateShanten(oTilesList);
+            Assert.AreEqual(pnExpectedResult, shanten);
+        }
+
+        [DataTestMethod]
+        [DataRow("123p458s1345789m","789m", 1)]
+        public void EvaluateShanten_ReceiveValidAHandArgumentWith1LockedBlocks_GivesMinimumShanten(String psMahjongHand, String psLockedBlock, int pnExpectedResult)
+        {
+            Hand oHand = new Hand();
+            oHand.Tiles = _HandParser.ParseTileStringToTileList(psMahjongHand);
+            oHand.LockedBlocks.Add(_BlockParser.ParseBlock(psLockedBlock));
+
+            int shanten = _SUT.EvaluateShanten(oHand);
             Assert.AreEqual(pnExpectedResult, shanten);
         }
     }

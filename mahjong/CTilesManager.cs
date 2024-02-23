@@ -5,6 +5,10 @@ using System.Linq;
 
 namespace Mahjong
 {
+    /// <summary>
+    /// Utility class for managing a list of tiles
+    /// Perform counting, removal, sorting, searching, cloning.
+    /// </summary>
     public class CTilesManager
     {
 

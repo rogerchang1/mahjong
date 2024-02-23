@@ -20,11 +20,43 @@ namespace Mahjong
             _HandParser = new CHandParser();
         }
 
-        public int EvaluateShanten(List<Tile> poTilesList)
+        public int EvaluateShanten(Hand poHand)
         {
+            List<Tile> oTileList = _TilesManager.Clone(poHand.Tiles);
 
+            int nNumLockedBlocks = 0;
+
+            for(int i = 0; i < poHand.LockedBlocks.Count; i++)
+            {
+                Block oBlock = poHand.LockedBlocks[i];
+                for(int j = 0; j < oBlock.Tiles.Count; j++)
+                {
+                    _TilesManager.RemoveSingleTileOf(oTileList,oBlock.Tiles[j]);
+                }
+                nNumLockedBlocks++;
+            }
+            return EvaluateShanten(oTileList, 4- nNumLockedBlocks);
+        }
+
+        /// <summary>
+        /// For evaluating a normal closed hand. Start at 8 and deduct 1 if it's a pair or partial group, deduct 2 if it's a full group. 
+        /// For evaluating a chiitoi closed hand. Start at 6 and deduct 1 if it's a pair. 
+        /// For evaluating a kokushi closed hand. Start at 13 and deduct 1 if it's in the kokushi tile list. Deduct only once again if a pair with any of kokushi tiles is found.
+        /// nBlocksLeft = 4 implies there are no locked blocks, aka there is no closed kan or open calls.
+        /// </summary>
+        /// <param name="poTilesList"></param>
+        /// <param name="nBlocksLeft"></param>
+        /// <returns></returns>
+        public int EvaluateShanten(List<Tile> poTilesList, int nBlocksLeft = 4)
+        {
             _TilesManager.SortTiles(poTilesList);
-            int shantenNormal = 8 - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), 4);
+
+            if(nBlocksLeft < 4 && nBlocksLeft > 0)
+            {
+                return (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
+            }
+
+            int shantenNormal = (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
             int shantenChiitoi = 6 - EvaluateShantenForChiitoi(_TilesManager.Clone(poTilesList), 7);
             int shantenKokushi = 13 - EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
             return Math.Min(shantenNormal, Math.Min(shantenChiitoi, shantenKokushi));
