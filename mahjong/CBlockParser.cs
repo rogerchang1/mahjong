@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Mahjong.Model;
+﻿using Mahjong.Model;
+using System;
 
 namespace Mahjong
 {
@@ -39,7 +36,7 @@ namespace Mahjong
 
             String sBlock = "";
 
-            for (int i = 0; i < poBlock.Tiles.Count;i++)
+            for (int i = 0; i < poBlock.Tiles.Count; i++)
             {
 
                 sBlock += poBlock.Tiles[i].ToString();

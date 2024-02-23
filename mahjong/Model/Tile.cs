@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mahjong.Model
+﻿namespace Mahjong.Model
 {
     public class Tile
     {
@@ -35,7 +31,7 @@ namespace Mahjong.Model
             else
             {
                 suit = "p";
-                num = compareValue ;
+                num = compareValue;
             }
         }
 

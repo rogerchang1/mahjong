@@ -2,13 +2,12 @@
 using Mahjong.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mahjong
 {
     public class CBlockSorter
     {
-        
+
         public CBlockSorter()
         {
 
@@ -24,7 +23,7 @@ namespace Mahjong
             List<Block> oBlockCombination = new List<Block>();
             CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
             CHandManager oHandManager = new CHandManager();
-            if(oShantenEvaluator.EvaluateShanten(pHand) != -1)
+            if (oShantenEvaluator.EvaluateShanten(pHand) != -1)
             {
                 throw new BlockSortException();
             }
@@ -37,14 +36,14 @@ namespace Mahjong
 
             List<Block> oPossiblePairs = GetListOfPossiblePairBlocks(poHand);
 
-            foreach(Block oPair in oPossiblePairs)
+            foreach (Block oPair in oPossiblePairs)
             {
                 Hand oTempHand = oHandManager.Clone(poHand);
 
                 oHandManager.RemoveNumInstancesTileOf(oTempHand, oPair.Tiles[0], 2);
 
                 List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
-                if(oSubBlockCombinations != null)
+                if (oSubBlockCombinations != null)
                 {
                     foreach (List<Block> oSubBlockCombination in oSubBlockCombinations)
                     {
@@ -58,7 +57,7 @@ namespace Mahjong
 
         public List<List<Block>> GetBlockCombinationsWithNoPair(Hand poHand)
         {
-            if(poHand.Tiles.Count < 3)
+            if (poHand.Tiles.Count < 3)
             {
                 return null;
             }
@@ -69,19 +68,19 @@ namespace Mahjong
 
             if (poHand.Tiles.Count == 3 || poHand.Tiles.Count == 4)
             {
-                
+
                 int nNumberOfSameTiles = oHandManager.CountNumberOfTilesOf(poHand, poHand.Tiles[0]);
                 Boolean bIsStartOfAValidRun = oHandManager.CanBeStartOfARun(poHand, poHand.Tiles[0]);
                 if (nNumberOfSameTiles == 3 || nNumberOfSameTiles == 4 || bIsStartOfAValidRun)
                 {
                     List<Block> oBlockCombination = new List<Block>();
                     Block oBlock = new Block();
-                    for(int i = 0; i < poHand.Tiles.Count; i++)
+                    for (int i = 0; i < poHand.Tiles.Count; i++)
                     {
                         oBlock.Tiles.Add(poHand.Tiles[i]);
                     }
-                    oBlockCombination.Insert(0,oBlock);
-                    oBlockCombinations.Insert(0,oBlockCombination);
+                    oBlockCombination.Insert(0, oBlock);
+                    oBlockCombinations.Insert(0, oBlockCombination);
                     return oBlockCombinations;
                 }
                 else
@@ -91,11 +90,11 @@ namespace Mahjong
             }
 
             Tile o1stTile = poHand.Tiles[0];
-           
-            if(oHandManager.CountNumberOfTilesOf(poHand, o1stTile) == 3)
+
+            if (oHandManager.CountNumberOfTilesOf(poHand, o1stTile) == 3)
             {
                 Hand oTempHand = oHandManager.Clone(poHand);
-                    
+
                 Block oBlock = new Block();
                 oBlock.Tiles.Add(o1stTile);
                 oBlock.Tiles.Add(o1stTile);
@@ -109,8 +108,8 @@ namespace Mahjong
                 {
                     foreach (List<Block> oListBlock in oSubBlockCombinations)
                     {
-                        oListBlock.Insert(0,oBlock);
-                        oBlockCombinations.Insert(0,oListBlock);
+                        oListBlock.Insert(0, oBlock);
+                        oBlockCombinations.Insert(0, oListBlock);
                     }
 
                 }
@@ -132,17 +131,17 @@ namespace Mahjong
                 oHandManager.RemoveNumInstancesTileOf(oTempHand, o3rdTile, 1);
 
                 List<List<Block>> oSubBlockCombinations = GetBlockCombinationsWithNoPair(oTempHand);
-                if(oSubBlockCombinations != null)
+                if (oSubBlockCombinations != null)
                 {
-                    foreach(List<Block> oListBlock in oSubBlockCombinations)
+                    foreach (List<Block> oListBlock in oSubBlockCombinations)
                     {
-                        oListBlock.Insert(0,oBlock);
-                        oBlockCombinations.Insert(0,oListBlock);
+                        oListBlock.Insert(0, oBlock);
+                        oBlockCombinations.Insert(0, oListBlock);
                     }
                 }
             }
 
-            if(oBlockCombinations.Count == 0)
+            if (oBlockCombinations.Count == 0)
             {
                 return null;
             }
@@ -156,11 +155,11 @@ namespace Mahjong
             CHandManager oHandManager = new CHandManager();
 
             Tile oCurrentTile = null;
-            for(int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poHand.Tiles.Count; i++)
             {
-                if(oCurrentTile != null && oCurrentTile.CompareTo(poHand.Tiles[i]) == 0)
+                if (oCurrentTile != null && oCurrentTile.CompareTo(poHand.Tiles[i]) == 0)
                 {
-                    continue;  
+                    continue;
                 }
 
                 oCurrentTile = poHand.Tiles[i];

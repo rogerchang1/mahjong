@@ -1,5 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mahjong.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
@@ -66,7 +66,7 @@ namespace Mahjong.Test
             CHandParser oHandParser = new CHandParser();
             Hand oHand = oHandParser.ParseHand("123s");
             Tile oTile = new Tile("4s");
-            
+
             Assert.IsNull(_SUT.GetNextIncreasingTileInTheSameSuit(oHand, oTile));
         }
 

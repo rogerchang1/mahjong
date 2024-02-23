@@ -8,6 +8,6 @@ namespace Mahjong.Model
     {
         public List<Tile> Tiles = new List<Tile>();
         public Mentsu Type = Mentsu.Unknown;
-        public Boolean IsOpen = false; 
+        public Boolean IsOpen = false;
     }
 }

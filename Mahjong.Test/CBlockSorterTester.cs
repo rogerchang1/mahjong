@@ -1,6 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mahjong;
 using Mahjong.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
@@ -66,11 +65,11 @@ namespace Mahjong.Test
             {
                 List<Block> oActualResult = oActualResults[i];
                 Assert.AreEqual(oExpectedBlockCombinations[i].Count, oActualResult.Count);
-                for(int j = 0; j < oActualResult.Count; j++)
+                for (int j = 0; j < oActualResult.Count; j++)
                 {
                     Block oActualBlock = oActualResult[j];
                     Block oExpectedBlock = oExpectedBlockCombinations[i][j];
-                    for(int k = 0; k < oActualBlock.Tiles.Count; k++)
+                    for (int k = 0; k < oActualBlock.Tiles.Count; k++)
                     {
                         Assert.AreEqual(oExpectedBlock.Tiles[k].CompareValue, oActualBlock.Tiles[k].CompareValue);
                     }

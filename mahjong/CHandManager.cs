@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Mahjong.Model;
+using System;
 using System.Linq;
-using System.Text;
-
-using Mahjong.Model;
 
 namespace Mahjong
 {
@@ -12,7 +9,7 @@ namespace Mahjong
 
         public CHandManager()
         {
-            
+
         }
 
         public void SortTiles(Hand poHand)
@@ -69,7 +66,7 @@ namespace Mahjong
             return null;
         }
 
-        
+
         public int CountNumberOfTilesOf(Hand poHand, Tile poTile)
         {
             if (poTile == null)
@@ -97,7 +94,7 @@ namespace Mahjong
                 return false;
             }
 
-            if(poTile.suit == "z")
+            if (poTile.suit == "z")
             {
                 return false;
             }

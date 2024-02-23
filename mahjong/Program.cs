@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Mahjong;
+﻿using Mahjong;
 using Mahjong.Model;
+using System;
+using System.Collections.Generic;
 
 namespace mahjong
 {
@@ -53,7 +53,7 @@ namespace mahjong
         {
             for (int i = 0; i < pTileList.Count; i++)
             {
-                Console.Write(pTileList[i].ToString()+" ");
+                Console.Write(pTileList[i].ToString() + " ");
             }
             Console.WriteLine();
         }

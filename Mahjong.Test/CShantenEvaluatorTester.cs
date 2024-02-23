@@ -1,6 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Mahjong;
 using Mahjong.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace Mahjong.Test

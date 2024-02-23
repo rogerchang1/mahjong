@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Mahjong
+﻿namespace Mahjong
 {
     public class Enums
     {
@@ -12,7 +8,7 @@ namespace Mahjong
             /// <summary>
             /// Sequence
             /// </summary>
-            Shuntsu, 
+            Shuntsu,
             /// <summary>
             /// Triplet
             /// </summary>
@@ -25,6 +21,22 @@ namespace Mahjong
             /// Pair
             /// </summary>
             Jantou
+        }
+
+        public enum Wind
+        {
+            Unknown,
+            East,
+            South,
+            West,
+            North
+        }
+
+        public enum Agari
+        {
+            Unknown,
+            Tsumo,
+            Ron
         }
     }
 }

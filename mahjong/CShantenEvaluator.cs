@@ -1,7 +1,5 @@
 ﻿using Mahjong.Model;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mahjong
 {
@@ -30,7 +28,7 @@ namespace Mahjong
 
         public int EvaluateShantenNormal(Hand poHand, int nBlocksLeft)
         {
-            if(poHand.Tiles.Count <= 1 || nBlocksLeft <= 0)
+            if (poHand.Tiles.Count <= 1 || nBlocksLeft <= 0)
             {
                 return 0;
             }
@@ -39,7 +37,7 @@ namespace Mahjong
             bool bHasPair = false;
             int max = 0;
 
-            for(int i = 0; i < poHand.Tiles.Count; i++)
+            for (int i = 0; i < poHand.Tiles.Count; i++)
             {
                 if (IsPairDetected(poHand, i))
                 {
@@ -63,7 +61,7 @@ namespace Mahjong
             }
             int max = 0;
             int i = 0;
-            while(i < poHand.Tiles.Count)
+            while (i < poHand.Tiles.Count)
             {
                 if (IsSequenceDetected(poHand, i) && nBlocksLeft > 0)
                 {
@@ -71,7 +69,8 @@ namespace Mahjong
                     nBlocksLeft--;
                     RemoveSequenceAtIndex(poHand, i);
                     i--;
-                } else if (IsTripletDetected(poHand, poHand.Tiles[i]) && nBlocksLeft > 0)
+                }
+                else if (IsTripletDetected(poHand, poHand.Tiles[i]) && nBlocksLeft > 0)
                 {
                     max += 2;
                     nBlocksLeft--;
@@ -86,14 +85,14 @@ namespace Mahjong
             {
                 if (IsPartialSequenceDetected(poHand, i) && nBlocksLeft > 0)
                 {
-                    max ++;
+                    max++;
                     nBlocksLeft--;
                     RemovePartialSequenceAtIndex(poHand, i);
                     i--;
                 }
                 else if (IsPairDetected(poHand, i) && nBlocksLeft > 0)
                 {
-                    max ++;
+                    max++;
                     nBlocksLeft--;
                     RemovePairAtIndex(poHand, i);
                     i--;
@@ -125,12 +124,12 @@ namespace Mahjong
 
         private Boolean IsSequenceDetected(Hand poSortedHand, int index)
         {
-            if(index > poSortedHand.Tiles.Count)
+            if (index > poSortedHand.Tiles.Count)
             {
                 return false;
             }
             Tile currentTile = poSortedHand.Tiles[index];
-            if(currentTile.suit == "z")
+            if (currentTile.suit == "z")
             {
                 return false;
             }
