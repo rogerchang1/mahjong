@@ -35,7 +35,7 @@ namespace Mahjong.Test
         public void EvaluateShanten_ReceiveValidAHandStringArgument_GivesMinimumShanten(String psMahjongHand, int pnExpectedResult)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
 
             int shanten = _SUT.EvaluateShanten(oTilesList);
             Assert.AreEqual(pnExpectedResult, shanten);

@@ -15,7 +15,7 @@ namespace mahjong
             String sMahjongHand = "44555666777888p";
 
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oHand = oHandParser.ParseHandToTileList(sMahjongHand);
+            List<Tile> oHand = oHandParser.ParseTileStringToTileList(sMahjongHand);
             //oHand.SortTiles();
 
             CTilesManager oHandManager = new CTilesManager();

@@ -1,5 +1,6 @@
 ﻿using Mahjong.Model;
 using System;
+using static Mahjong.Enums;
 
 namespace Mahjong
 {
@@ -10,7 +11,7 @@ namespace Mahjong
         {
         }
 
-        public Block ParseBlock(string psBlock)
+        public Block ParseBlock(string psBlock, Mentsu peType = Mentsu.Unknown, Boolean pbIsOpen = false)
         {
             String currentSuit = "";
             Block oBlock = new Block();
@@ -26,6 +27,10 @@ namespace Mahjong
                     currentSuit = psBlock[i].ToString().ToLower();
                 }
             }
+
+            oBlock.Type = peType;
+            oBlock.IsOpen = pbIsOpen;
+
             return oBlock;
         }
 

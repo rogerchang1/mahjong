@@ -30,23 +30,23 @@ namespace Mahjong
             return oHand;
         }
 
-        public List<Tile> ParseHandToTileList(string psHand)
+        public List<Tile> ParseTileStringToTileList(string psTiles)
         {
             String currentSuit = "";
-            List<Tile> oHand = new List<Tile>();
-            for (int i = psHand.Length - 1; i >= 0; i--)
+            List<Tile> oTileList = new List<Tile>();
+            for (int i = psTiles.Length - 1; i >= 0; i--)
             {
 
-                if (Char.IsDigit(psHand[i]))
+                if (Char.IsDigit(psTiles[i]))
                 {
-                    oHand.Insert(0, new Tile(psHand[i] - '0', currentSuit));
+                    oTileList.Insert(0, new Tile(psTiles[i] - '0', currentSuit));
                 }
                 else
                 {
-                    currentSuit = psHand[i].ToString().ToLower();
+                    currentSuit = psTiles[i].ToString().ToLower();
                 }
             }
-            return oHand;
+            return oTileList;
         }
 
         public String ToString(Hand poHand)

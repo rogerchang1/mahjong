@@ -25,7 +25,7 @@ namespace Mahjong.Test
         public void SortTiles_TilesAreUnSorted_SortsTheTiles(String psMahjongHand)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
 
             _SUT.SortTiles(oTilesList);
             for (int i = 0; i < oTilesList.Count - 1; i++)
@@ -42,7 +42,7 @@ namespace Mahjong.Test
         public void FindFirstIndexOfTile_TileExistsInHand_ReturnsFirstIndexOfTile(String psMahjongHand, String psTile, int pnExpectedResult)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             Tile oTile = new Tile(psTile);
             Assert.AreEqual(pnExpectedResult, _SUT.FindFirstIndexOfTile(oTilesList, oTile));
         }
@@ -55,7 +55,7 @@ namespace Mahjong.Test
         public void GetNextIncreasingTileInTheSameSuit_TileExistsInHand_ReturnsNextIncreasingTileInSameSuit(String psMahjongHand, String psTile, String psExpectedResult)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             Tile oTile = new Tile(psTile);
             Tile oExpectedTile = new Tile(psExpectedResult);
             Assert.AreEqual(oExpectedTile.CompareValue, _SUT.GetNextIncreasingTileInTheSameSuit(oTilesList, oTile).CompareValue);
@@ -65,7 +65,7 @@ namespace Mahjong.Test
         public void GetNextIncreasingTileInTheSameSuit_TileDoesNotExistInHand_ReturnsNull()
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList("123s");
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList("123s");
             Tile oTile = new Tile("4s");
 
             Assert.IsNull(_SUT.GetNextIncreasingTileInTheSameSuit(oTilesList, oTile));
@@ -75,7 +75,7 @@ namespace Mahjong.Test
         public void GetNextIncreasingTileInTheSameSuit_NextIncreasingTileDoesNotExistInHand_ReturnsNull()
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList("123s");
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList("123s");
             Tile oTile = new Tile("3s");
 
             Assert.IsNull(_SUT.GetNextIncreasingTileInTheSameSuit(oTilesList, oTile));
@@ -95,7 +95,7 @@ namespace Mahjong.Test
         public void CanBeStartOfARun_ValidHandAndTileCanBeStartOfARun_ReturnsTrue(String psMahjongHand, String psTile)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             Tile oTile = new Tile(psTile);
             Assert.IsTrue(_SUT.CanBeStartOfARun(oTilesList, oTile));
         }
@@ -109,7 +109,7 @@ namespace Mahjong.Test
         public void CanBeStartOfARun_ValidHandAndTileCanNotBeStartOfARun_ReturnsFalse(String psMahjongHand, String psTile)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             Tile oTile = new Tile(psTile);
             Assert.IsFalse(_SUT.CanBeStartOfARun(oTilesList, oTile));
         }
@@ -123,7 +123,7 @@ namespace Mahjong.Test
         public void RemoveSingleTileOf_ValidHandAndTile_RemoveTileFromHand(String psMahjongHand, String psTile, int pnExpectedCountOfTileAfterRemoval)
         {
             CHandParser oHandParser = new CHandParser();
-            List<Tile> oTilesList = oHandParser.ParseHandToTileList(psMahjongHand);
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
             Tile oTile = new Tile(psTile);
             _SUT.RemoveSingleTileOf(oTilesList, oTile);
 
