@@ -215,6 +215,21 @@ namespace Mahjong
             }
         }
 
+        public Boolean IsHonorTile(Tile poTile)
+        {
+            return poTile.suit == "z";
+        }
+
+        public Boolean IsWindTile(Tile poTile)
+        {
+            return (poTile.suit == "z" && poTile.num >= 1 && poTile.num <= 4);
+        }
+
+        public Boolean IsDragonTile(Tile poTile)
+        {
+            return (poTile.suit == "z" && poTile.num >= 5 && poTile.num <= 7);
+        }
+
         public List<Tile> Clone(List<Tile> poTilesList)
         {
             List<Tile> oHand = new List<Tile>();

@@ -63,6 +63,10 @@
 
         public int CompareTo(Tile other)
         {
+            if(other == null)
+            {
+                return int.MaxValue;
+            }
             return this.CompareValue - other.CompareValue;
         }
 

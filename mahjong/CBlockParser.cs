@@ -34,6 +34,16 @@ namespace Mahjong
             return oBlock;
         }
 
+        public Block ParseBlock(string psBlock, Boolean pbIsOpen)
+        {
+            return ParseBlock(psBlock, Mentsu.Unknown, pbIsOpen);
+        }
+
+        public Suit GetBlockSuit(Block poBlock)
+        {
+            return Enums.TileSuitToEnum(poBlock.Tiles[0]);
+        }
+
         public String ToString(Block poBlock)
         {
 
