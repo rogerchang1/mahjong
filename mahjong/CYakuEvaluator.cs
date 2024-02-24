@@ -135,6 +135,8 @@ namespace Mahjong
                 return false;
             }
 
+            Boolean bIipeikouFound = false;
+
             for(int i = 0; i < poBlockCombination.Count; i++)
             {
                 if(poBlockCombination[i].Type != Mentsu.Shuntsu)
@@ -149,8 +151,16 @@ namespace Mahjong
                     }
                     if(poBlockCombination[i].Tiles[0].CompareTo(poBlockCombination[j].Tiles[0]) == 0)
                     {
-                        return true;
+                        if(bIipeikouFound == true)
+                        {
+                            return false;
+                        }
+                        bIipeikouFound = true;
                     }
+                }
+                if (bIipeikouFound)
+                {
+                    return true;
                 }
             }
             return false;
@@ -171,19 +181,12 @@ namespace Mahjong
 
         public Boolean IsChinitsu(Hand poHand, List<Block> poBlockCombination)
         {
-            Suit oSuit = _BlockParser.GetBlockSuit(poBlockCombination[0]);
-            if (oSuit == Suit.Honor)
+            List<Suit> oSuitList = _TilesManager.GetSuitsFromTileList(poHand.Tiles);
+            if(oSuitList.Count == 1 && oSuitList[0] != Suit.Honor)
             {
-                return false;
+                return true;
             }
-            foreach(Block oBlock in poBlockCombination)
-            {
-                if(_BlockParser.GetBlockSuit(oBlock) != oSuit)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return false;
         }
         #endregion
 

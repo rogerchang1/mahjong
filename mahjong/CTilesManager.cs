@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Mahjong.Enums;
 
 namespace Mahjong
 {
@@ -17,22 +18,22 @@ namespace Mahjong
 
         }
 
-        public void SortTiles(List<Tile> poTilesList)
+        public void SortTiles(List<Tile> poTileList)
         {
-            poTilesList.Sort(delegate (Tile t1, Tile t2) { return t1.CompareTo(t2); });
+            poTileList.Sort(delegate (Tile t1, Tile t2) { return t1.CompareTo(t2); });
         }
 
         /// <summary>
         /// Best used in conjunction with SortTiles() for finding sequential tiles.
         /// </summary>
-        /// <param name="poTilesList"></param>
+        /// <param name="poTileList"></param>
         /// <param name="poTile"></param>
         /// <returns></returns>
-        public int FindFirstIndexOfTile(List<Tile> poTilesList, Tile poTile)
+        public int FindFirstIndexOfTile(List<Tile> poTileList, Tile poTile)
         {
-            for (int i = 0; i < poTilesList.Count; i++)
+            for (int i = 0; i < poTileList.Count; i++)
             {
-                if (poTile.CompareTo(poTilesList[i]) == 0)
+                if (poTile.CompareTo(poTileList[i]) == 0)
                 {
                     return i;
                 }
@@ -44,35 +45,35 @@ namespace Mahjong
         /// Gets the next tile in the hand of the same suit. 
         /// For example, GetNextIncreasingTileInTheSameSuit("1278s",1s") = 2s, GetNextIncreasingTileInTheSameSuit("1278s",2s") = 7s, GetNextIncreasingTileInTheSameSuit("1278s",8s") = null
         /// </summary>
-        /// <param name="poTilesList"></param>
+        /// <param name="poTileList"></param>
         /// <param name="poTile"></param>
         /// <returns></returns>
-        public Tile GetNextIncreasingTileInTheSameSuit(List<Tile> poTilesList, Tile poTile)
+        public Tile GetNextIncreasingTileInTheSameSuit(List<Tile> poTileList, Tile poTile)
         {
             if (poTile == null)
             {
                 return null;
             }
 
-            SortTiles(poTilesList);
+            SortTiles(poTileList);
 
-            int index = FindFirstIndexOfTile(poTilesList, poTile);
+            int index = FindFirstIndexOfTile(poTileList, poTile);
             if (index == -1)
             {
                 return null;
             }
-            for (int i = index + 1; i < poTilesList.Count; i++)
+            for (int i = index + 1; i < poTileList.Count; i++)
             {
-                if (poTilesList[i].num != poTilesList[index].num && poTilesList[i].suit == poTilesList[index].suit)
+                if (poTileList[i].num != poTileList[index].num && poTileList[i].suit == poTileList[index].suit)
                 {
-                    return poTilesList[i];
+                    return poTileList[i];
                 }
             }
             return null;
         }
 
 
-        public int CountNumberOfTilesOf(List<Tile> poTilesList, Tile poTile)
+        public int CountNumberOfTilesOf(List<Tile> poTileList, Tile poTile)
         {
             if (poTile == null)
             {
@@ -81,9 +82,9 @@ namespace Mahjong
 
             int count = 0;
 
-            for (int i = 0; i < poTilesList.Count; i++)
+            for (int i = 0; i < poTileList.Count; i++)
             {
-                if (poTilesList[i].CompareTo(poTile) == 0)
+                if (poTileList[i].CompareTo(poTile) == 0)
                 {
                     count++;
                 }
@@ -92,7 +93,7 @@ namespace Mahjong
             return count;
         }
 
-        public int CountNumberOfTilesOf(List<Tile> poTilesList, String psTile)
+        public int CountNumberOfTilesOf(List<Tile> poTileList, String psTile)
         {
             if (psTile == "")
             {
@@ -103,9 +104,9 @@ namespace Mahjong
 
             int count = 0;
 
-            for (int i = 0; i < poTilesList.Count; i++)
+            for (int i = 0; i < poTileList.Count; i++)
             {
-                if (poTilesList[i].CompareTo(oTile) == 0)
+                if (poTileList[i].CompareTo(oTile) == 0)
                 {
                     count++;
                 }
@@ -114,7 +115,7 @@ namespace Mahjong
             return count;
         }
 
-        public Boolean CanBeStartOfARun(List<Tile> poTilesList, Tile poTile)
+        public Boolean CanBeStartOfARun(List<Tile> poTileList, Tile poTile)
         {
             if (poTile == null)
             {
@@ -126,9 +127,9 @@ namespace Mahjong
                 return false;
             }
 
-            SortTiles(poTilesList);
+            SortTiles(poTileList);
 
-            int index = FindFirstIndexOfTile(poTilesList, poTile);
+            int index = FindFirstIndexOfTile(poTileList, poTile);
 
             if (index == -1)
             {
@@ -152,7 +153,7 @@ namespace Mahjong
                     break;
             }
 
-            Tile o2ndTile = GetNextIncreasingTileInTheSameSuit(poTilesList, poTile);
+            Tile o2ndTile = GetNextIncreasingTileInTheSameSuit(poTileList, poTile);
 
             if (o2ndTile == null)
             {
@@ -164,7 +165,7 @@ namespace Mahjong
                 return false;
             }
 
-            Tile o3rdTile = GetNextIncreasingTileInTheSameSuit(poTilesList, o2ndTile);
+            Tile o3rdTile = GetNextIncreasingTileInTheSameSuit(poTileList, o2ndTile);
 
             if (o3rdTile == null)
             {
@@ -180,19 +181,19 @@ namespace Mahjong
 
         }
 
-        public void RemoveSingleTileOf(List<Tile> poTilesList, Tile poTileToRemove)
+        public void RemoveSingleTileOf(List<Tile> poTileList, Tile poTileToRemove)
         {
-            RemoveNumInstancesTileOf(poTilesList, poTileToRemove, 1);
+            RemoveNumInstancesTileOf(poTileList, poTileToRemove, 1);
         }
 
-        public void RemoveNumInstancesTileOf(List<Tile> poTilesList, Tile poTileToRemove, int nNumTimesToRemove)
+        public void RemoveNumInstancesTileOf(List<Tile> poTileList, Tile poTileToRemove, int nNumTimesToRemove)
         {
             int count = 0;
-            for (int i = 0; i < poTilesList.Count; i++)
+            for (int i = 0; i < poTileList.Count; i++)
             {
-                if (poTileToRemove.CompareTo(poTilesList[i]) == 0)
+                if (poTileToRemove.CompareTo(poTileList[i]) == 0)
                 {
-                    poTilesList.RemoveAt(i);
+                    poTileList.RemoveAt(i);
                     i--;
                     count++;
                     if (count >= nNumTimesToRemove)
@@ -203,16 +204,30 @@ namespace Mahjong
             }
         }
 
-        public void RemoveAllTilesOf(List<Tile> poTilesList, Tile poTileToRemove)
+        public void RemoveAllTilesOf(List<Tile> poTileList, Tile poTileToRemove)
         {
-            for (int i = 0; i < poTilesList.Count; i++)
+            for (int i = 0; i < poTileList.Count; i++)
             {
-                if (poTileToRemove.CompareTo(poTilesList[i]) == 0)
+                if (poTileToRemove.CompareTo(poTileList[i]) == 0)
                 {
-                    poTilesList.RemoveAt(i);
+                    poTileList.RemoveAt(i);
                     i--;
                 }
             }
+        }
+
+        public List<Suit> GetSuitsFromTileList(List<Tile> poTileList)
+        {
+            List<Suit> oSuitList = new List<Suit>();
+            for(int i = 0; i < poTileList.Count; i++)
+            {
+                Suit oSuit = TileSuitToEnum(poTileList[i]);
+                if (!oSuitList.Contains(oSuit))
+                {
+                    oSuitList.Add(oSuit);
+                }
+            }
+            return oSuitList;
         }
 
         public Boolean IsHonorTile(Tile poTile)
@@ -230,10 +245,10 @@ namespace Mahjong
             return (poTile.suit == "z" && poTile.num >= 5 && poTile.num <= 7);
         }
 
-        public List<Tile> Clone(List<Tile> poTilesList)
+        public List<Tile> Clone(List<Tile> poTileList)
         {
             List<Tile> oHand = new List<Tile>();
-            oHand = poTilesList.ToList();
+            oHand = poTileList.ToList();
             return oHand;
         }
     }
