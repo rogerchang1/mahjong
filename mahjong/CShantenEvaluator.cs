@@ -98,20 +98,20 @@ namespace Mahjong
             int i = 0;
             while (i < poTilesList.Count)
             {
-                if (IsSequenceDetected(poTilesList, i) && nBlocksLeft > 0)
-                {
-                    max += 2;
-                    nBlocksLeft--;
-                    RemoveSequenceAtIndex(poTilesList, i);
-                    i--;
-                }
-                else if (IsTripletDetected(poTilesList, poTilesList[i]) && nBlocksLeft > 0)
+                
+                if (IsTripletDetected(poTilesList, poTilesList[i]) && nBlocksLeft > 0)
                 {
                     max += 2;
                     nBlocksLeft--;
                     RemoveTripletAtIndex(poTilesList, i);
                     i--;
                     //max = Math.Max(max, 2 + EvaluateShantenNormal(RemoveSequenceAtIndex(poTilesList.Clone(), i), nBlocksLeft - 1));
+                }else if (IsSequenceDetected(poTilesList, i) && nBlocksLeft > 0)
+                {
+                    max += 2;
+                    nBlocksLeft--;
+                    RemoveSequenceAtIndex(poTilesList, i);
+                    i--;
                 }
                 i++;
             }

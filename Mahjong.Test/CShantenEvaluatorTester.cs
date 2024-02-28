@@ -22,6 +22,9 @@ namespace Mahjong.Test
         }
 
         [DataTestMethod]
+        [DataRow("555s555678p222z66z", -1)]
+        [DataRow("555s567888p222z66z", -1)]
+        [DataRow("555s566667p222z66z", -1)]
         [DataRow("147p258s369m1234z", 6)] //chiitoi will never make shanten go above 6
         [DataRow("147p258s369m1134z", 5)]
         [DataRow("147p258s369m1555z", 5)]
