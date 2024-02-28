@@ -22,10 +22,13 @@ namespace mahjong
             //Console.WriteLine("Enter a mahjong hand to parse:");
             //String sMahjongHand = "111133p445566s9m"; //quad tile to see if it'll trip
             //String sMahjongHand = "44555666777888p"; //lots of block combinations
-            String sMahjongHand = "34555666777888p"; //lots of block combinations, finished hand
+            //String sMahjongHand = "34555666777888p"; //lots of block combinations, finished hand
+
+
+            String sMahjongHand = "555s555678p222z66z"; //lots of block combinations, finished hand
 
             List<String> sCalledBlocks = new List<String>(){ 
-                //"888p" 
+                "222z" 
             };
 
             Hand oHand = oHandParser.ParseHand(sMahjongHand);
@@ -50,8 +53,10 @@ namespace mahjong
                 Console.WriteLine();
             }
 
-            oHand.WinTile = new Tile("8p");
-            Console.WriteLine("Win tile: " + oHand.WinTile.ToString());
+            oHand.WinTile = new Tile("5p");
+            oHand.SeatWind = Wind.South;
+            oHand.Agari = Agari.Ron;
+            Console.WriteLine("Win tile: " + oHand.WinTile.ToString() + ", Type: " + oHand.Agari.ToString());
             Console.WriteLine();
 
             //End Build the hand---------------------------------------------------------------------------------------------

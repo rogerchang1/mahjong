@@ -73,11 +73,15 @@ namespace Mahjong
             if (IsSanshokuDoujun(poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.SanshokuDoujun);
-            }
-
-            if (IsIttsuu(poBlockConfiguration))
+            }else if (IsIttsuu(poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.Ittsuu);
+            }else if (IsJunchan(poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.Junchan);
+            }else if (IsChanta(poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.Chanta);
             }
 
             if (IsRyanpeikou(poHand, poBlockConfiguration))
@@ -95,7 +99,6 @@ namespace Mahjong
                     oYakuCombination.Add(Yaku.Iipeikou);
                 }
             }
-
             
             if (IsSankantsu(poHand, poBlockConfiguration))
             {
@@ -110,6 +113,11 @@ namespace Mahjong
                 oYakuCombination.Add(Yaku.Toitoi);
             }
 
+            if (IsHonroutou(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.Honroutou);
+            }
+
             if (IsSanshokuDoukou(poHand, poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.SanshoukuDoukou);
@@ -121,6 +129,41 @@ namespace Mahjong
             }else if (IsHonitsu(poHand, poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.Honitsu);
+            }
+
+            if (IsHatsu(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiHatsu);
+            }
+
+            if (IsChun(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiChun);
+            }
+
+            if (IsHaku(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiHaku);
+            }
+
+            if (IsTon(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiTon);
+            }
+
+            if (IsNan(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiNan);
+            }
+
+            if (IsSha(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiSha);
+            }
+
+            if (IsPei(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.YakuhaiPei);
             }
 
             return oYakuCombination;
@@ -185,6 +228,83 @@ namespace Mahjong
                 }
             }
             return true;
+        }
+
+        public Boolean IsJunchan(List<Block> poBlockCombination)
+        {
+            //If it's all Koutsu, that's a yakuman.
+            Boolean bHasShuntsu = false;
+            
+            for (int i = 0; i < poBlockCombination.Count; i++)
+            {
+                Block oBlock = poBlockCombination[i];
+                if(oBlock.Type == Mentsu.Shuntsu)
+                {
+                    bHasShuntsu = true;
+                }
+                Boolean bHasATerminal = false;
+                for(int j = 0; j < oBlock.Tiles.Count; j++)
+                {
+                    if((oBlock.Tiles[j].num == 1 || oBlock.Tiles[j].num == 9) && oBlock.Tiles[j].suit != "z")
+                    {
+                        bHasATerminal = true;
+                        break;
+                    }
+                }
+                if (!bHasATerminal)
+                {
+                    return false;
+                }
+            }
+            if (bHasShuntsu)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public Boolean IsChanta(List<Block> poBlockCombination)
+        {
+            //If it's all Koutsu, that's honroutou
+            Boolean bHasShuntsu = false;
+            Boolean bHasHonorBlock = false;
+
+            for (int i = 0; i < poBlockCombination.Count; i++)
+            {
+                Block oBlock = poBlockCombination[i];
+                if (oBlock.Type == Mentsu.Shuntsu)
+                {
+                    bHasShuntsu = true;
+                }
+
+                if(oBlock.Tiles[0].suit == "z")
+                {
+                    bHasHonorBlock = true;
+                }
+                else
+                {
+                    Boolean bHasATerminal = false;
+                    for (int j = 0; j < oBlock.Tiles.Count; j++)
+                    {
+                        if ((oBlock.Tiles[j].num == 1 || oBlock.Tiles[j].num == 9) && oBlock.Tiles[j].suit != "z")
+                        {
+                            bHasATerminal = true;
+                            break;
+                        }
+                    }
+                    if (!bHasATerminal)
+                    {
+                        return false;
+                    }
+                }
+
+               
+            }
+            if (bHasShuntsu && bHasHonorBlock)
+            {
+                return true;
+            }
+            return false;
         }
 
         public Boolean IsSanshokuDoujun(List<Block> poBlockCombination)
@@ -273,7 +393,7 @@ namespace Mahjong
 
         public Boolean IsChiitoi(Hand poHand, List<Block> poBlockCombination)
         {
-            if (_ShantenEvaluator.EvaluateShantenForChiitoi(poHand.Tiles, 6) == -1)
+            if (_ShantenEvaluator.EvaluateShantenForChiitoi(_TilesManager.Clone(poHand.Tiles), 6) == -1)
             {
                 return true;
             }
@@ -369,6 +489,29 @@ namespace Mahjong
             return false;
         }
 
+        public Boolean IsHonroutou(Hand poHand, List<Block> poBlockCombination)
+        {
+            //All honors or all terminals is a yakuman instead
+            Boolean bHasHonor = false;
+            Boolean bHasTerminal = false;
+            for (int i = 0; i < poHand.Tiles.Count; i++)
+            {
+
+                if ((poHand.Tiles[i].num != 1 || poHand.Tiles[i].num != 9) && poHand.Tiles[i].suit != "z") {
+                    return false;
+                }
+                if ((poHand.Tiles[i].num == 1 || poHand.Tiles[i].num == 9) && poHand.Tiles[i].suit != "z")
+                {
+                    bHasTerminal = true;
+                }
+                if(poHand.Tiles[i].suit == "z")
+                {
+                    bHasHonor = true;
+                }
+            }
+            return bHasTerminal && bHasHonor;
+        }
+
         public Boolean IsSanshokuDoukou(Hand poHand, List<Block> poBlockCombination)
         {
 
@@ -414,7 +557,6 @@ namespace Mahjong
             return count == 3;
         }
 
-        
         public Boolean IsSanankou(Hand poHand, List<Block> poBlockCombination)
         {
             int count = 0;
@@ -467,6 +609,107 @@ namespace Mahjong
             }
             return false;
         }
+
+        public Boolean IsChun(Hand poHand, List<Block> poBlockCombination)
+        {
+           foreach(Block oBlock in poBlockCombination)
+            {
+                if((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Chun)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsHaku(Hand poHand, List<Block> poBlockCombination)
+        {
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Haku)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsHatsu(Hand poHand, List<Block> poBlockCombination)
+        {
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Hatsu)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsTon(Hand poHand, List<Block> poBlockCombination)
+        {
+            if(poHand.RoundWind != Wind.East && poHand.SeatWind != Wind.East)
+            {
+                return false;
+            }
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.East)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsNan(Hand poHand, List<Block> poBlockCombination)
+        {
+            if (poHand.RoundWind != Wind.South && poHand.SeatWind != Wind.South)
+            {
+                return false;
+            }
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.South)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsSha(Hand poHand, List<Block> poBlockCombination)
+        {
+            if (poHand.RoundWind != Wind.West && poHand.SeatWind != Wind.West)
+            {
+                return false;
+            }
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.West)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public Boolean IsPei(Hand poHand, List<Block> poBlockCombination)
+        {
+            if (poHand.RoundWind != Wind.North && poHand.SeatWind != Wind.North)
+            {
+                return false;
+            }
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.North)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #endregion
 
         private Boolean IsHandClosedAtTenpai(Hand poHand)
