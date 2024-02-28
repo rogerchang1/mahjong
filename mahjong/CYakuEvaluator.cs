@@ -710,6 +710,45 @@ namespace Mahjong
             return false;
         }
 
+        public Boolean IsShousangen(Hand poHand, List<Block> poBlockCombination)
+        {
+            Boolean bChunFound = false;
+            Boolean bHakuFound = false;
+            Boolean bHatsuFound = false;
+            Boolean bJantouFound = false;
+            foreach (Block oBlock in poBlockCombination)
+            {
+                if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu || oBlock.Type == Mentsu.Jantou))
+                {
+                    if(DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Chun)
+                    {
+                        bChunFound = true;
+                        if(oBlock.Type == Mentsu.Jantou)
+                        {
+                            bJantouFound = true;
+                        }
+                    }
+                    if (DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Haku)
+                    {
+                        bHakuFound = true;
+                        if (oBlock.Type == Mentsu.Jantou)
+                        {
+                            bJantouFound = true;
+                        }
+                    }
+                    if (DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Hatsu)
+                    {
+                        bHatsuFound = true;
+                        if (oBlock.Type == Mentsu.Jantou)
+                        {
+                            bJantouFound = true;
+                        }
+                    }
+                }
+            }
+            return bChunFound && bHakuFound && bHatsuFound && bJantouFound;
+        }
+
         #endregion
 
         private Boolean IsHandClosedAtTenpai(Hand poHand)

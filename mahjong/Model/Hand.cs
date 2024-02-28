@@ -14,6 +14,8 @@ namespace Mahjong.Model
         public Wind RoundWind = Wind.Unknown;
         public Boolean IsRiichi = false;
         public Boolean IsDoubleRiichi = false;
+        public Boolean IsIppatsu = false;
+        public Boolean IsRinshan = false;
         public int DoraCount = 0;
     }
 }
