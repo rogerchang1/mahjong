@@ -1,0 +1,16 @@
+{"Hand":"555s555678p222z66z",
+"LockedBlocks":
+	{
+		"OpenBlocks":["222z"],
+		"ClosedBlocks":[]
+	},
+"WinTile":"5p",
+"Agari":"Ron",
+"SeatWind":"South",
+"RoundWind":"South",
+"IsRiichi":"False",
+"IsDoubleRiichi":"False",
+"IsIppatsu":"False",
+"IsRinshan":"False",
+"DoraCount":0,
+}

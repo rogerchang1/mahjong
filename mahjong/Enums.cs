@@ -78,6 +78,23 @@ namespace Mahjong
             North
         }
 
+        public static Wind WindStringToEnum(String psWind)
+        {
+            switch (psWind.ToLower().Trim())
+            {
+                case "east":
+                    return Wind.East;
+                case "south":
+                    return Wind.South;
+                case "west":
+                    return Wind.West;
+                case "north":
+                    return Wind.North;
+                default:
+                    return Wind.Unknown;
+            }
+        }
+
         public static Wind WindTileToEnum(Tile poTile)
         {
             if (poTile.suit != "z")
@@ -163,6 +180,19 @@ namespace Mahjong
             Unknown,
             Tsumo,
             Ron
+        }
+
+        public static Agari AgariStringToEnum(String psAgari)
+        {
+            switch (psAgari.ToLower().Trim())
+            {
+                case "tsumo":
+                    return Agari.Tsumo;
+                case "ron":
+                    return Agari.Ron;
+                default:
+                    return Agari.Unknown;
+            }
         }
 
         public enum Yaku
