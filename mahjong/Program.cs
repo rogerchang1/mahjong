@@ -18,21 +18,27 @@ namespace mahjong
             CYakuEvaluator oYakuEvaluator = new CYakuEvaluator();
             CJSONHandLoader oJSONHandLoader = new CJSONHandLoader();
 
-            //Load the hand
-            Hand oHand = oJSONHandLoader.CreateHandFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
-            printHandInformation(oHand);
+            //Load the hand(s)
+            //Hand oHand = oJSONHandLoader.CreateHandFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
+            List<Hand> oHandList = oJSONHandLoader.CreateHandsFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
 
-            //Evaluate the hand
-            int shanten = shantenEvaluator.EvaluateShanten(oHand);
-            Console.WriteLine("The shanten is " + shanten);
-            Console.WriteLine();
-            
-            Console.WriteLine("The hand can be configured in the following ways:");
-            List<List<Block>> oBlockCombinations = oBlockSorter.GetBlockCombinations(oHand);
-            foreach (List<Block> oBlockCombination in oBlockCombinations)
-            {
-                printBlockCombination(oBlockCombination);
-                printYakuList(oYakuEvaluator.EvaluateYakusFromSingleBlockCombination(oHand, oBlockCombination));
+            foreach(Hand oHand in oHandList){
+                printHandInformation(oHand);
+
+                //Evaluate the hand
+                int shanten = shantenEvaluator.EvaluateShanten(oHand);
+                Console.WriteLine("The shanten is " + shanten);
+                Console.WriteLine();
+
+                Console.WriteLine("The hand can be configured in the following ways:");
+                List<List<Block>> oBlockCombinations = oBlockSorter.GetBlockCombinations(oHand);
+                foreach (List<Block> oBlockCombination in oBlockCombinations)
+                {
+                    printBlockCombination(oBlockCombination);
+                    printYakuList(oYakuEvaluator.EvaluateYakusFromSingleBlockCombination(oHand, oBlockCombination));
+                    Console.WriteLine();
+                }
+                Console.WriteLine("//-------------------------------------------------------------------------------------------");
                 Console.WriteLine();
             }
         }

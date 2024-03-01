@@ -26,12 +26,48 @@ namespace Mahjong
         public Hand CreateHandFromJSONFile(string psJSONFilePath)
         {
             string json = File.ReadAllText(psJSONFilePath);
-            return CreateHandFromJSON(json);
+            return CreateHandFromJSONString(json);
         }
 
-        public Hand CreateHandFromJSON(string psJSON)
+        public List<Hand> CreateHandsFromJSONFile(string psJSONFilePath)
+        {
+            string json = File.ReadAllText(psJSONFilePath);
+            return CreateHandsFromJSONString(json);
+        }
+
+        public Hand CreateHandFromJSONString(string psJSON)
+        {
+            var dynamicJson = JsonConvert.DeserializeObject<dynamic>(psJSON);
+            return CreateHandFromJSONObject(dynamicJson);
+        }
+
+        public List<Hand> CreateHandsFromJSONString(string psJSON)
+        {
+            List<Hand> oHandList = new List<Hand>();
+            var dynamicJson = JsonConvert.DeserializeObject<dynamic>(psJSON);
+            if(dynamicJson == null)
+            {
+                return oHandList;
+            }
+            if (dynamicJson.Hands == null)
+            {
+                return oHandList;
+            }
+            foreach(var jsonHand in dynamicJson.Hands)
+            {
+                oHandList.Add(CreateHandFromJSONObject(jsonHand));
+            }
+            return oHandList;
+        }
+
+        public Hand CreateHandFromJSONObject(dynamic dynamicJson)
         {
             Hand oHand = new Hand();
+
+            if(dynamicJson == null)
+            {
+                return oHand;
+            }
 
             String sHand = "";
             List<String> oOpenLockedBlocks = new List<String>();
@@ -46,7 +82,7 @@ namespace Mahjong
             Boolean bIsRinshan = false;
             int nDoraCount = 0;
 
-            var dynamicJson = JsonConvert.DeserializeObject<dynamic>(psJSON);
+            
 
             if (dynamicJson.Hand != null)
             {
