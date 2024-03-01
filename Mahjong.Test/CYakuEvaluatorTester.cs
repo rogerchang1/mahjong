@@ -24,18 +24,13 @@ namespace Mahjong.Test
         [TestMethod]
         public void IsTanyao_HandIsInTenpaiAndIsTanyao_ReturnTrue()
         {
-            Block oBlock1 = _BlockParser.ParseBlock("456p");
-            Block oBlock2 = _BlockParser.ParseBlock("233s");
-            Block oBlock3 = _BlockParser.ParseBlock("456s");
-            Block oBlock4 = _BlockParser.ParseBlock("678m");
-            Block oBlock5 = _BlockParser.ParseBlock("33s");
-
-            List<Block> oBlockCombination = new List<Block>();
-            oBlockCombination.Add(oBlock1);
-            oBlockCombination.Add(oBlock2);
-            oBlockCombination.Add(oBlock3);
-            oBlockCombination.Add(oBlock4);
-            oBlockCombination.Add(oBlock5);
+            List<Block> oBlockCombination = new List<Block>() {
+                _BlockParser.ParseBlock("456p"),
+                _BlockParser.ParseBlock("233s"),
+                _BlockParser.ParseBlock("456s"),
+                _BlockParser.ParseBlock("678m"),
+                _BlockParser.ParseBlock("33s")
+            };
 
             Assert.IsTrue(_SUT.IsTanyao(oBlockCombination));
         }

@@ -58,7 +58,7 @@ namespace Mahjong
 
             int shantenNormal = (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
             int shantenChiitoi = EvaluateShantenForChiitoi(poTilesList);
-            int shantenKokushi = 13 - EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
+            int shantenKokushi = EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
             return Math.Min(shantenNormal, Math.Min(shantenChiitoi, shantenKokushi));
         }
 
@@ -187,7 +187,7 @@ namespace Mahjong
                     bPairFound = true;
                 }
             }
-            return max;
+            return 13 - max;
         }
 
         #region GroupDetection

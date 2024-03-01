@@ -32,6 +32,7 @@ namespace Mahjong
 
             List<Block> oLockedBlockList = new List<Block>();
 
+            //Remove the tiles from the locked blocks from the hand so we can just figure out the remaining tiles for the possible combinations
             for (int i = 0; i < poHand.LockedBlocks.Count; i++)
             {
                 Block oBlock = poHand.LockedBlocks[i];
@@ -56,10 +57,6 @@ namespace Mahjong
             return oBlockCombinations;
         }
 
-        //TODO:
-        //1. Kan
-        //2. Open Hands
-        //3. Kokushi Musou
         public List<List<Block>> GetBlockCombinations(List<Tile> poTilesList)
         {
             List<List<Block>> oBlockCombinations = new List<List<Block>>();            

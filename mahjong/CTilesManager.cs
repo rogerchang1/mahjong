@@ -235,6 +235,11 @@ namespace Mahjong
             return poTile.suit == "z";
         }
 
+        public Boolean IsTerminalTile(Tile poTile)
+        {
+            return poTile.suit != "z" && (poTile.num == 1 || poTile.num == 9);
+        }
+
         public Boolean IsWindTile(Tile poTile)
         {
             return (poTile.suit == "z" && poTile.num >= 1 && poTile.num <= 4);
