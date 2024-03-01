@@ -384,7 +384,9 @@ namespace Mahjong
                 return false;
             }
 
-            if(_ShantenEvaluator.EvaluateShantenForChiitoi(_TilesManager.Clone(poHand.Tiles), 6) == -1 && poBlockCombination.Count(n => n.Type == Mentsu.Shuntsu) == 4)
+            int nShuntsuBlocks = poBlockCombination.Count(n => n.Type == Mentsu.Shuntsu);
+
+            if (_ShantenEvaluator.EvaluateShantenForChiitoi(poHand.Tiles) == -1 && nShuntsuBlocks == 4)
             {
                 return true;
             }
@@ -393,7 +395,7 @@ namespace Mahjong
 
         public Boolean IsChiitoi(Hand poHand, List<Block> poBlockCombination)
         {
-            if (_ShantenEvaluator.EvaluateShantenForChiitoi(_TilesManager.Clone(poHand.Tiles), 6) == -1)
+            if (_ShantenEvaluator.EvaluateShantenForChiitoi(poHand.Tiles) == -1)
             {
                 return true;
             }

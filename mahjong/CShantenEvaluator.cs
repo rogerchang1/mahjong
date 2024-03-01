@@ -57,7 +57,7 @@ namespace Mahjong
             }
 
             int shantenNormal = (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
-            int shantenChiitoi = 6 - EvaluateShantenForChiitoi(_TilesManager.Clone(poTilesList), 7);
+            int shantenChiitoi = EvaluateShantenForChiitoi(poTilesList);
             int shantenKokushi = 13 - EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
             return Math.Min(shantenNormal, Math.Min(shantenChiitoi, shantenKokushi));
         }
@@ -137,7 +137,12 @@ namespace Mahjong
             return max;
         }
 
-        public int EvaluateShantenForChiitoi(List<Tile> poTilesList, int nBlocksLeft)
+        public int EvaluateShantenForChiitoi(List<Tile> poTilesList)
+        {
+            return 6 - EvaluateShantenForChiitoiHelper(_TilesManager.Clone(poTilesList), 7);
+        }
+
+        private int EvaluateShantenForChiitoiHelper(List<Tile> poTilesList, int nBlocksLeft)
         {
             if (poTilesList.Count <= 1 || nBlocksLeft <= 0)
             {
@@ -151,7 +156,7 @@ namespace Mahjong
                 if (IsPairDetected(poTilesList, i))
                 {
                     _TilesManager.RemoveAllTilesOf(poTilesList, poTilesList[i]);
-                    max = 1 + EvaluateShantenForChiitoi(poTilesList, nBlocksLeft - 1);
+                    max = 1 + EvaluateShantenForChiitoiHelper(poTilesList, nBlocksLeft - 1);
                 }
             }
             return max;
