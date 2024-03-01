@@ -384,7 +384,7 @@ namespace Mahjong
                 return false;
             }
 
-            if(_ShantenEvaluator.EvaluateShantenForChiitoi(poHand.Tiles, 6) == -1 && poBlockCombination.Count(n => n.Type == Mentsu.Shuntsu) == 4)
+            if(_ShantenEvaluator.EvaluateShantenForChiitoi(_TilesManager.Clone(poHand.Tiles), 6) == -1 && poBlockCombination.Count(n => n.Type == Mentsu.Shuntsu) == 4)
             {
                 return true;
             }
@@ -452,8 +452,8 @@ namespace Mahjong
                     return false;
                 }
                 //Win on a ron will cause the winning tile's block to be open
-                //if ((poBlockCombination[i].Type == Mentsu.Koutsu && poBlockCombination[i].Type == Mentsu.Kantsu) && poHand.Agari == Agari.Ron && poBlockCombination[i].Tiles[0].CompareTo(poHand.WinTile) == 0)
-                if ((poBlockCombination[i].Type == Mentsu.Koutsu && poBlockCombination[i].Type == Mentsu.Kantsu) && poBlockCombination[i].IsOpen == true)
+                if ((poBlockCombination[i].Type == Mentsu.Koutsu || poBlockCombination[i].Type == Mentsu.Kantsu) && poHand.Agari == Agari.Ron && poBlockCombination[i].Tiles[0].CompareTo(poHand.WinTile) == 0)
+                //if ((poBlockCombination[i].Type == Mentsu.Koutsu && poBlockCombination[i].Type == Mentsu.Kantsu) && poBlockCombination[i].IsOpen == true)
                 {
                     return false;
                 }
@@ -571,8 +571,9 @@ namespace Mahjong
                     {
                         count++;
                     }
-                    if(poBlockCombination[i].Tiles[0].CompareTo(poHand.WinTile) == 0 && poHand.Agari == Agari.Ron)
+                    if (poBlockCombination[i].Tiles[0].CompareTo(poHand.WinTile) == 0 && poHand.Agari == Agari.Ron)
                     {
+                        count--;
                         bHasKoutsuWithWinningTileOnRon = true;
                     }
                 }
