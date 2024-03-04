@@ -17,7 +17,7 @@ namespace mahjong
             CBlockSorter oBlockSorter = new CBlockSorter();
             CYakuEvaluator oYakuEvaluator = new CYakuEvaluator();
             CJSONHandLoader oJSONHandLoader = new CJSONHandLoader();
-
+            CScoreEvaluator oScoreEvaluator = new CScoreEvaluator();
             //Load the hand(s)
             //Hand oHand = oJSONHandLoader.CreateHandFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
             List<Hand> oHandList = oJSONHandLoader.CreateHandsFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
@@ -36,6 +36,8 @@ namespace mahjong
                 {
                     printBlockCombination(oBlockCombination);
                     printYakuList(oYakuEvaluator.EvaluateYakusFromSingleBlockCombination(oHand, oBlockCombination));
+                    Score oScore = oScoreEvaluator.EvaluteScoreFromABlockCombination(oHand, oBlockCombination);
+                    Console.WriteLine(oScore.Han + " han, " + oScore.Fu + " fu = " + oScore.Payment + " " + oScore.DealerPayment);
                     Console.WriteLine();
                 }
                 Console.WriteLine("//-------------------------------------------------------------------------------------------");

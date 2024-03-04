@@ -93,6 +93,11 @@ namespace Mahjong
             return count;
         }
 
+        public Boolean ContainsTileOf(List<Tile> poTileList, Tile psTile)
+        {
+            return CountNumberOfTilesOf(poTileList, psTile.ToString()) > 0;
+        }
+
         public int CountNumberOfTilesOf(List<Tile> poTileList, String psTile)
         {
             if (psTile == "")
@@ -248,6 +253,57 @@ namespace Mahjong
         public Boolean IsDragonTile(Tile poTile)
         {
             return (poTile.suit == "z" && poTile.num >= 5 && poTile.num <= 7);
+        }
+
+        public Boolean IsTileAKanChan(List<Tile> poTileList, Tile poTile)
+        {
+            if(poTileList.Count != 3)
+            {
+                return false;
+            }
+            if (poTileList[0].CompareTo(poTileList[1]) != -1 && poTileList[1].CompareTo(poTileList[2]) != -1)
+            {
+                return false;
+            }
+            if(poTileList[1].CompareTo(poTile) != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public Boolean IsTileAPenChan(List<Tile> poTileList, Tile poTile)
+        {
+            if (poTileList.Count != 3)
+            {
+                return false;
+            }
+            if (poTileList[0].CompareTo(poTileList[1]) != -1 && poTileList[1].CompareTo(poTileList[2]) != -1)
+            {
+                return false;
+            }
+            if (poTileList[2].num != 3 && poTileList[0].num != 7)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public Boolean IsTileARyanmen(List<Tile> poTileList, Tile poTile)
+        {
+            if (poTileList.Count != 3)
+            {
+                return false;
+            }
+            if (poTileList[0].CompareTo(poTileList[1]) != -1 && poTileList[1].CompareTo(poTileList[2]) != -1)
+            {
+                return false;
+            }
+            if (poTileList[0].CompareTo(poTile) == 0 && poTileList[2].CompareTo(poTile) == 0)
+            {
+                return true;
+            }
+            return false;
         }
 
         public List<Tile> Clone(List<Tile> poTileList)

@@ -100,6 +100,11 @@ namespace Mahjong
 
             #region RegularYakus
             //Order of Yakus matter, for instance, Daisangen > Shousangen, Rynpeikou > Iipeikou, Junchan > Chanta
+            if (IsMenzenTsumo(poHand, poBlockConfiguration))
+            {
+                oYakuCombination.Add(Yaku.Tsumo);
+
+            }
             if (IsPinfu(poHand, poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.Pinfu);
@@ -442,6 +447,15 @@ namespace Mahjong
         #endregion
 
         #region Regular Yaku Evaluator Functions
+
+        public Boolean IsMenzenTsumo(Hand poHand, List<Block> poBlockCombination)
+        {
+            if (IsHandClosedAtTenpai(poHand) && poHand.Agari == Agari.Tsumo)
+            {
+                return true;
+            }
+            return false;
+        }
         public Boolean IsPinfu(Hand poHand, List<Block> poBlockCombination)
         {
             if (!IsHandClosedAtTenpai(poHand))

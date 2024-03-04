@@ -51,6 +51,23 @@
 			"IsIppatsu":"False",
 			"IsRinshan":"False",
 			"DoraCount":0,
+		},
+		{
+			"Hand":"456s234789p22s567m",
+			"LockedBlocks":
+				{
+					"OpenBlocks":[],
+					"ClosedBlocks":[]
+				},
+			"WinTile":"7m",
+			"Agari":"tsumo",
+			"RoundWind":"South",
+			"SeatWind":"south",
+			"IsRiichi":"False",
+			"IsDoubleRiichi":"False",
+			"IsIppatsu":"False",
+			"IsRinshan":"False",
+			"DoraCount":0,
 		}
 	]
 }
