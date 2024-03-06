@@ -103,7 +103,7 @@ namespace Mahjong
             List<Yaku> oYakuList = _YakuEvaluator.EvaluateYakusFromSingleBlockCombination(poHand, poBlockCombination);
 
             Score oScore = new Score();
-            int han = 0;
+            int han = poHand.DoraCount + poHand.AkaDoraCount + poHand.UraDoraCount;
             Boolean bIsPinfu = false;
             Boolean bIsChiitoi = false;
             foreach (Yaku yaku in oYakuList)
@@ -120,9 +120,32 @@ namespace Mahjong
             }
             oScore.Han = han;
             oScore.Fu = CalculateFu(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
-            double oPayment = oScore.Fu * Math.Pow(2, (oScore.Han + 2));
+            double oPayment = 0;
 
-            
+            if(han < 5)
+            {
+                oPayment = oScore.Fu * Math.Pow(2, (oScore.Han + 2));
+            }else if(han < 6)
+            {
+                oPayment = 2000; //mangan
+            }else if(han < 8)
+            {
+                oPayment = 3000; //haneman, * 1.5
+            }
+            else if (han < 11)
+            {
+                oPayment = 4000; //haneman, * 2
+            }
+            else if (han < 13)
+            {
+                oPayment = 6000; //haneman, * 3
+            }
+            else
+            {
+                oPayment = 8000; //haneman, * 4
+            }
+
+
             if (poHand.Agari == Agari.Ron)
             {
                 oPayment  = oPayment* 4;
@@ -130,14 +153,20 @@ namespace Mahjong
                 {
                     oPayment = oPayment * 1.5;
                 }
-                
             }
-            else if (poHand.Agari == Agari.Tsumo && poHand.SeatWind != Wind.East)
+            
+            if (poHand.Agari == Agari.Tsumo)
             {
-                double oDealerPayment = 2 * oPayment;
-                oScore.DealerPayment = (int)(Math.Ceiling((decimal)oDealerPayment / 100) * 100);
+                if (poHand.SeatWind == Wind.East)
+                {
+                    oPayment = oPayment * 2;
+                }
+                else
+                {
+                    double oDealerPayment = 2 * oPayment;
+                    oScore.DealerPayment = (int)(Math.Ceiling((decimal)oDealerPayment / 100) * 100);
+                }
             }
-
 
             oScore.Payment = (int)(Math.Ceiling((decimal)oPayment / 100) * 100);
             

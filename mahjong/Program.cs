@@ -80,7 +80,7 @@ namespace mahjong
             Console.WriteLine("Round Wind: " + poHand.RoundWind.ToString() + ", Seat Wind: " + poHand.SeatWind.ToString());
             Console.WriteLine("Riichi?: " + poHand.IsRiichi + ", Double Riichi?: " + poHand.IsDoubleRiichi);
             Console.WriteLine("Ippatsu?: " + poHand.IsIppatsu + ", Rinshan Kaihou?: " + poHand.IsRinshan);
-            Console.WriteLine("Dora count: " + poHand.DoraCount);
+            Console.WriteLine("Dora: " + poHand.DoraCount + ", AkaDora: " + poHand.AkaDoraCount + ", UraDora: " + poHand.UraDoraCount);
             Console.WriteLine();
         }
 

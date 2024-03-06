@@ -60,14 +60,16 @@
 					"ClosedBlocks":[]
 				},
 			"WinTile":"7m",
-			"Agari":"tsumo",
+			"Agari":"ron",
 			"RoundWind":"South",
 			"SeatWind":"south",
-			"IsRiichi":"False",
+			"IsRiichi":"true",
 			"IsDoubleRiichi":"False",
 			"IsIppatsu":"False",
 			"IsRinshan":"False",
-			"DoraCount":0,
+			"DoraCount":4,
+			"AkaDoraCount":3,
+			"UraDoraCount":4
 		}
 	]
 }

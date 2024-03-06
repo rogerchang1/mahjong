@@ -80,9 +80,14 @@ namespace Mahjong
             Boolean bIsDoubleRiichi = false;
             Boolean bIsIppatsu = false;
             Boolean bIsRinshan = false;
+            Boolean bIsChankan = false;
+            Boolean bIsHoutei = false;
+            Boolean bIsHaitei = false;
             int nDoraCount = 0;
+            int nAkaDoraCount = 0;
+            int nUraDoraCount = 0;
 
-            
+
 
             if (dynamicJson.Hand != null)
             {
@@ -131,9 +136,29 @@ namespace Mahjong
             {
                 bIsRinshan = (Boolean)dynamicJson.IsRinshan;
             }
+            if (dynamicJson.IsChankan != null)
+            {
+                bIsChankan = (Boolean)dynamicJson.IsChankan;
+            }
+            if (dynamicJson.IsHaitei != null)
+            {
+                bIsHaitei = (Boolean)dynamicJson.IsHaitei;
+            }
+            if (dynamicJson.IsHoutei != null)
+            {
+                bIsHoutei = (Boolean)dynamicJson.IsHoutei;
+            }
             if (dynamicJson.DoraCount != null)
             {
                 nDoraCount = (int)dynamicJson.DoraCount;
+            }
+            if (dynamicJson.AkaDoraCount != null)
+            {
+                nAkaDoraCount = (int)dynamicJson.AkaDoraCount;
+            }
+            if (dynamicJson.UraDoraCount != null)
+            {
+                nUraDoraCount = (int)dynamicJson.UraDoraCount;
             }
 
             oHand.Tiles = _HandParser.ParseTileStringToTileList(sHand);
@@ -153,7 +178,12 @@ namespace Mahjong
             oHand.IsDoubleRiichi = bIsDoubleRiichi;
             oHand.IsRinshan = bIsRinshan;
             oHand.IsIppatsu = bIsIppatsu;
+            oHand.IsChankan = bIsChankan;
+            oHand.IsHoutei = bIsHoutei;
+            oHand.IsHaitei = bIsHaitei;
             oHand.DoraCount = nDoraCount;
+            oHand.AkaDoraCount = nAkaDoraCount;
+            oHand.UraDoraCount = nUraDoraCount;
 
             _TilesManager.SortTiles(oHand.Tiles);
 

@@ -103,7 +103,34 @@ namespace Mahjong
             if (IsMenzenTsumo(poHand, poBlockConfiguration))
             {
                 oYakuCombination.Add(Yaku.Tsumo);
-
+            }
+            if (poHand.IsDoubleRiichi)
+            {
+                oYakuCombination.Add(Yaku.DoubleRiichi);
+            }
+            else if (poHand.IsRiichi)
+            {
+                oYakuCombination.Add(Yaku.Riichi);
+            }
+            if (poHand.IsIppatsu)
+            {
+                oYakuCombination.Add(Yaku.Ippatsu);
+            }
+            if (poHand.IsRinshan)
+            {
+                oYakuCombination.Add(Yaku.Rinshan);
+            }
+            if (poHand.IsChankan)
+            {
+                oYakuCombination.Add(Yaku.Chankan);
+            }
+            if (poHand.IsHoutei)
+            {
+                oYakuCombination.Add(Yaku.Houtei);
+            }
+            if (poHand.IsHaitei)
+            {
+                oYakuCombination.Add(Yaku.Haitei);
             }
             if (IsPinfu(poHand, poBlockConfiguration))
             {
