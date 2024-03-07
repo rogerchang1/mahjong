@@ -85,10 +85,14 @@ namespace Mahjong
 
             Score oScore = new Score();
 
-            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand.Tiles);
+            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand);
             foreach (List<Block> oBlockCombination in oBlockCombinations)
             {
                 Score tempScore = EvaluteScoreFromABlockCombination(poHand, oBlockCombination);
+                if(tempScore.Han > oScore.Han || (tempScore.Han == oScore.Han && tempScore.Fu > oScore.Fu))
+                {
+                    oScore = tempScore;
+                }
             }
             return oScore;
         }
@@ -103,6 +107,7 @@ namespace Mahjong
             List<Yaku> oYakuList = _YakuEvaluator.EvaluateYakusFromSingleBlockCombination(poHand, poBlockCombination);
 
             Score oScore = new Score();
+            oScore.YakuList = oYakuList;
             int han = poHand.DoraCount + poHand.AkaDoraCount + poHand.UraDoraCount;
             Boolean bIsPinfu = false;
             Boolean bIsChiitoi = false;
@@ -153,6 +158,7 @@ namespace Mahjong
                 {
                     oPayment = oPayment * 1.5;
                 }
+                oScore.SinglePayment = (int)(Math.Ceiling((decimal)oPayment / 100) * 100);
             }
             
             if (poHand.Agari == Agari.Tsumo)
@@ -164,11 +170,12 @@ namespace Mahjong
                 else
                 {
                     double oDealerPayment = 2 * oPayment;
-                    oScore.DealerPayment = (int)(Math.Ceiling((decimal)oDealerPayment / 100) * 100);
+                    oScore.AllPayment["Dealer"] = (int)(Math.Ceiling((decimal)oDealerPayment / 100) * 100);
                 }
+                oScore.AllPayment["Regular"] = (int)(Math.Ceiling((decimal)oPayment / 100) * 100);
             }
 
-            oScore.Payment = (int)(Math.Ceiling((decimal)oPayment / 100) * 100);
+            
             
 
             return oScore;
@@ -192,7 +199,10 @@ namespace Mahjong
             {
                 nFu += 2;
             }
-
+            if (poHand.Agari == Agari.Ron && _TilesManager.IsHandClosed(poHand))
+            {
+                nFu += 10;
+            }
             Boolean bIsWinTileFuCounted = false;
 
             foreach(Block oBlock in poBlockCombination)

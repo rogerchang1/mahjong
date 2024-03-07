@@ -27,21 +27,26 @@ namespace mahjong
 
                 //Evaluate the hand
                 int shanten = shantenEvaluator.EvaluateShanten(oHand);
-                Console.WriteLine("The shanten is " + shanten);
-                Console.WriteLine();
-
-                Console.WriteLine("The hand can be configured in the following ways:");
-                List<List<Block>> oBlockCombinations = oBlockSorter.GetBlockCombinations(oHand);
-                foreach (List<Block> oBlockCombination in oBlockCombinations)
+                if(shanten == -1)
                 {
-                    printBlockCombination(oBlockCombination);
-                    printYakuList(oYakuEvaluator.EvaluateYakusFromSingleBlockCombination(oHand, oBlockCombination));
-                    Score oScore = oScoreEvaluator.EvaluteScoreFromABlockCombination(oHand, oBlockCombination);
-                    Console.WriteLine(oScore.Han + " han, " + oScore.Fu + " fu = " + oScore.Payment + " " + oScore.DealerPayment);
-                    Console.WriteLine();
+                    Score oScore = oScoreEvaluator.EvaluateScore(oHand);
+                    printScore(oScore);
                 }
+                else
+                {
+                    Console.WriteLine("The shanten is " + shanten);
+                }
+
+                //List<List<Block>> oBlockCombinations = oBlockSorter.GetBlockCombinations(oHand);
+                //foreach (List<Block> oBlockCombination in oBlockCombinations)
+                //{
+                //    printBlockCombination(oBlockCombination);
+                //    printYakuList(oYakuEvaluator.EvaluateYakusFromSingleBlockCombination(oHand, oBlockCombination));
+                //    Score oScore = oScoreEvaluator.EvaluteScoreFromABlockCombination(oHand, oBlockCombination);
+                //    printScore(oScore);
+                //    Console.WriteLine();
+                //}
                 Console.WriteLine("//-------------------------------------------------------------------------------------------");
-                Console.WriteLine();
             }
         }
         #region PrintFunctions
@@ -80,12 +85,14 @@ namespace mahjong
             Console.WriteLine("Round Wind: " + poHand.RoundWind.ToString() + ", Seat Wind: " + poHand.SeatWind.ToString());
             Console.WriteLine("Riichi?: " + poHand.IsRiichi + ", Double Riichi?: " + poHand.IsDoubleRiichi);
             Console.WriteLine("Ippatsu?: " + poHand.IsIppatsu + ", Rinshan Kaihou?: " + poHand.IsRinshan);
+            Console.WriteLine("Chankan?: " + poHand.IsChankan + ", Haitei?: " + poHand.IsHaitei + ", Houtei?: " + poHand.IsHoutei);
             Console.WriteLine("Dora: " + poHand.DoraCount + ", AkaDora: " + poHand.AkaDoraCount + ", UraDora: " + poHand.UraDoraCount);
             Console.WriteLine();
         }
 
         public static void printBlockCombination(List<Block> pBlockList)
         {
+            Console.WriteLine("The hand can be configured in the following ways:");
             for (int i = 0; i < pBlockList.Count; i++)
             {
                 Block oBlock = pBlockList[i];
@@ -105,6 +112,28 @@ namespace mahjong
                 Console.Write(pYakuList[i].ToString().ToUpper() + " ");
             }
             Console.WriteLine();
+        }
+
+        public static void printScore(Score poScore)
+        {
+            printYakuList(poScore.YakuList);
+            Console.Write("Score: " + poScore.Han + " han " + poScore.Fu + " fu, ");
+            if (poScore.SinglePayment != 0)
+            {
+                Console.WriteLine(poScore.SinglePayment);
+            }
+            else
+            {
+                if (poScore.AllPayment["Dealer"] == 0)
+                {
+                    Console.WriteLine(poScore.AllPayment["Regular"] + " ALL");
+                }
+                else
+                {
+                    Console.WriteLine(poScore.AllPayment["Regular"] + "-" + poScore.AllPayment["Dealer"]);
+                }
+
+            }
         }
         #endregion
     }
