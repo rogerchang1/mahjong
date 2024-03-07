@@ -57,7 +57,8 @@ namespace Mahjong
             return oBlockCombinations;
         }
 
-        public List<List<Block>> GetBlockCombinations(List<Tile> poTilesList)
+        //TODO sigh rename this function better to differentiate. This one doesn't take into account of the locked blocks.
+        private List<List<Block>> GetBlockCombinations(List<Tile> poTilesList)
         {
             List<List<Block>> oBlockCombinations = new List<List<Block>>();            
 

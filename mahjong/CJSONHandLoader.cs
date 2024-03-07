@@ -168,7 +168,7 @@ namespace Mahjong
             }
             foreach (String sBlock in oClosedLockedBlocks)
             {
-                oHand.LockedBlocks.Add(_BlockParser.ParseBlock(sBlock, true));
+                oHand.LockedBlocks.Add(_BlockParser.ParseBlock(sBlock, false));
             }
             oHand.WinTile = oWinTile;
             oHand.Agari = eAgari;

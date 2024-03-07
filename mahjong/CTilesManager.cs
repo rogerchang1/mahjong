@@ -306,6 +306,18 @@ namespace Mahjong
             return false;
         }
 
+        public Boolean IsHandClosed(Hand poHand)
+        {
+            foreach (Block oBlock in poHand.LockedBlocks)
+            {
+                if (oBlock.IsOpen == true)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public List<Tile> Clone(List<Tile> poTileList)
         {
             List<Tile> oHand = new List<Tile>();

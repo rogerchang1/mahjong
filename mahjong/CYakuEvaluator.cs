@@ -32,7 +32,7 @@ namespace Mahjong
                 return oYakuCombinations;
             }
 
-            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand.Tiles);
+            List<List<Block>> oBlockCombinations = _BlockSorter.GetBlockCombinations(poHand);
 
             foreach (List<Block> oBlockCombination in oBlockCombinations)
             {
@@ -1046,16 +1046,10 @@ namespace Mahjong
 
         #endregion
 
+        //TODO should probably remove this redundant function
         private Boolean IsHandClosedAtTenpai(Hand poHand)
         {
-            foreach(Block oBlock in poHand.LockedBlocks)
-            {
-                if(oBlock.Type != Mentsu.Kantsu)
-                {
-                    return false;
-                }
-            }
-            return true;
+            return _TilesManager.IsHandClosed(poHand);
         }
 
     }
