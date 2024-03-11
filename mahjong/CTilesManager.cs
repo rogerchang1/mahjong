@@ -20,6 +20,10 @@ namespace Mahjong
 
         public void SortTiles(List<Tile> poTileList)
         {
+            if(poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             poTileList.Sort(delegate (Tile t1, Tile t2) { return t1.CompareTo(t2); });
         }
 
@@ -31,6 +35,10 @@ namespace Mahjong
         /// <returns></returns>
         public int FindFirstIndexOfTile(List<Tile> poTileList, Tile poTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             for (int i = 0; i < poTileList.Count; i++)
             {
                 if (poTile.CompareTo(poTileList[i]) == 0)
@@ -50,6 +58,10 @@ namespace Mahjong
         /// <returns></returns>
         public Tile GetNextIncreasingTileInTheSameSuit(List<Tile> poTileList, Tile poTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             if (poTile == null)
             {
                 return null;
@@ -95,11 +107,23 @@ namespace Mahjong
 
         public Boolean ContainsTileOf(List<Tile> poTileList, Tile psTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
+            if (psTile == null)
+            {
+                return false;
+            }
             return CountNumberOfTilesOf(poTileList, psTile.ToString()) > 0;
         }
 
         public int CountNumberOfTilesOf(List<Tile> poTileList, String psTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             if (psTile == "")
             {
                 return 0;
@@ -122,6 +146,10 @@ namespace Mahjong
 
         public Boolean CanBeStartOfARun(List<Tile> poTileList, Tile poTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             if (poTile == null)
             {
                 return false;
@@ -193,6 +221,10 @@ namespace Mahjong
 
         public void RemoveNumInstancesTileOf(List<Tile> poTileList, Tile poTileToRemove, int nNumTimesToRemove)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             int count = 0;
             for (int i = 0; i < poTileList.Count; i++)
             {
@@ -211,6 +243,10 @@ namespace Mahjong
 
         public void RemoveAllTilesOf(List<Tile> poTileList, Tile poTileToRemove)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             for (int i = 0; i < poTileList.Count; i++)
             {
                 if (poTileToRemove.CompareTo(poTileList[i]) == 0)
@@ -223,6 +259,10 @@ namespace Mahjong
 
         public List<Suit> GetSuitsFromTileList(List<Tile> poTileList)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             List<Suit> oSuitList = new List<Suit>();
             for(int i = 0; i < poTileList.Count; i++)
             {
@@ -237,27 +277,51 @@ namespace Mahjong
 
         public Boolean IsHonorTile(Tile poTile)
         {
+            if(poTile == null)
+            {
+                return false;
+            }
             return poTile.suit == "z";
         }
 
         public Boolean IsTerminalTile(Tile poTile)
         {
+            if (poTile == null)
+            {
+                return false;
+            }
             return poTile.suit != "z" && (poTile.num == 1 || poTile.num == 9);
         }
 
         public Boolean IsWindTile(Tile poTile)
         {
+            if (poTile == null)
+            {
+                return false;
+            }
             return (poTile.suit == "z" && poTile.num >= 1 && poTile.num <= 4);
         }
 
         public Boolean IsDragonTile(Tile poTile)
         {
+            if (poTile == null)
+            {
+                return false;
+            }
             return (poTile.suit == "z" && poTile.num >= 5 && poTile.num <= 7);
         }
 
         public Boolean IsTileAKanChan(List<Tile> poTileList, Tile poTile)
         {
-            if(poTileList.Count != 3)
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
+            if (poTile == null)
+            {
+                return false;
+            }
+            if (poTileList.Count != 3)
             {
                 return false;
             }
@@ -274,6 +338,14 @@ namespace Mahjong
 
         public Boolean IsTileAPenChan(List<Tile> poTileList, Tile poTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
+            if (poTile == null)
+            {
+                return false;
+            }
             if (poTileList.Count != 3)
             {
                 return false;
@@ -291,6 +363,14 @@ namespace Mahjong
 
         public Boolean IsTileARyanmen(List<Tile> poTileList, Tile poTile)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
+            if (poTile == null)
+            {
+                return false;
+            }
             if (poTileList.Count != 3)
             {
                 return false;
@@ -308,6 +388,10 @@ namespace Mahjong
 
         public Boolean IsHandClosed(Hand poHand)
         {
+            if(poHand == null)
+            {
+                throw new ArgumentNullException(nameof(poHand));
+            }
             foreach (Block oBlock in poHand.LockedBlocks)
             {
                 if (oBlock.IsOpen == true)
@@ -320,6 +404,10 @@ namespace Mahjong
 
         public List<Tile> Clone(List<Tile> poTileList)
         {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
             List<Tile> oHand = new List<Tile>();
             oHand = poTileList.ToList();
             return oHand;

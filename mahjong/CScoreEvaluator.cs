@@ -127,27 +127,28 @@ namespace Mahjong
             oScore.Fu = CalculateFu(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
             double oPayment = 0;
 
-            if(han < 5)
-            {
-                oPayment = oScore.Fu * Math.Pow(2, (oScore.Han + 2));
-            }else if(han < 6)
+            if(han == 5 || (han == 4 && oScore.Fu >= 40) || (han == 3 && oScore.Fu >= 70) )
             {
                 oPayment = 2000; //mangan
-            }else if(han < 8)
+            }else if(han == 6 || han == 7)
             {
                 oPayment = 3000; //haneman, * 1.5
             }
-            else if (han < 11)
+            else if (han >= 8 && han <= 10)
             {
-                oPayment = 4000; //haneman, * 2
+                oPayment = 4000; //baiman, * 2
             }
-            else if (han < 13)
+            else if (han == 11 || han == 12)
             {
-                oPayment = 6000; //haneman, * 3
+                oPayment = 6000; //sanbaiman, * 3
+            }
+            else if (han >= 13)
+            {
+                oPayment = 8000; //yakuman, * 4
             }
             else
             {
-                oPayment = 8000; //haneman, * 4
+                oPayment = oScore.Fu * Math.Pow(2, (oScore.Han + 2));
             }
 
 

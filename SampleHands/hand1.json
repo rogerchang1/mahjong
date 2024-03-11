@@ -19,21 +19,21 @@
 			"DoraCount":0,
 		},
 		{
-			"Hand":"44555666777888p",
+			"Hand":"445555z123456s888p",
 			"LockedBlocks":
 				{
 					"OpenBlocks":[],
-					"ClosedBlocks":[]
+					"ClosedBlocks":["5555z"]
 				},
-			"WinTile":"5p",
-			"Agari":"Ron",
+			"WinTile":"8p",
+			"Agari":"ron",
 			"RoundWind":"South",
 			"SeatWind":"west",
 			"IsRiichi":"False",
 			"IsDoubleRiichi":"False",
 			"IsIppatsu":"False",
 			"IsRinshan":"False",
-			"DoraCount":0,
+			"DoraCount":2,
 		},
 		{
 			"Hand":"334455p667788s33z",

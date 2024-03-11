@@ -42,7 +42,7 @@ namespace Mahjong
                 }
                 oLockedBlockList.Add(oBlock);
             }
-            List<List<Block>> oBlockCombinations = GetBlockCombinations(oTileList);
+            List<List<Block>> oBlockCombinations = GetBlockCombinationsFromTileList(oTileList);
 
             if(oLockedBlockList.Count > 0)
             {
@@ -58,7 +58,7 @@ namespace Mahjong
         }
 
         //TODO sigh rename this function better to differentiate. This one doesn't take into account of the locked blocks.
-        private List<List<Block>> GetBlockCombinations(List<Tile> poTilesList)
+        public List<List<Block>> GetBlockCombinationsFromTileList(List<Tile> poTilesList)
         {
             List<List<Block>> oBlockCombinations = new List<List<Block>>();            
 

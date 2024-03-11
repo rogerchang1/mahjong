@@ -19,6 +19,12 @@ namespace Mahjong.Test
         }
 
         #region SortTiles
+        [TestMethod]
+        public void SortTiles_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.SortTiles(null));
+        }
+
         [DataTestMethod]
         [DataRow("1p4s5m0z3z6s1p")]
         [DataRow("5s4m8p2z1p4s5m0z3z6s1p")]
@@ -36,6 +42,12 @@ namespace Mahjong.Test
         #endregion
 
         #region FindFirstIndexOfTile
+        [TestMethod]
+        public void FindFirstIndexOfTile_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.FindFirstIndexOfTile(null,null));
+        }
+
         [DataTestMethod]
         [DataRow("1p4s5m0z3z6s1p", "4s", 1)]
         [DataRow("5s4m8p2z1p4s5m0z3z6s1p", "1p", 4)]
@@ -49,6 +61,12 @@ namespace Mahjong.Test
         #endregion
 
         #region GetNextIncreasingTileInTheSameSuit
+        [TestMethod]
+        public void GetNextIncreasingTileInTheSameSuit_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.GetNextIncreasingTileInTheSameSuit(null, null));
+        }
+
         [DataTestMethod]
         [DataRow("1278s", "1s", "2s")]
         [DataRow("1278s", "2s", "7s")]
@@ -83,7 +101,67 @@ namespace Mahjong.Test
 
         #endregion
 
+        #region ContainsTileOf
+        [TestMethod]
+        public void ContainsTileOf_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.ContainsTileOf(null, null));
+        }
+
+        [TestMethod]
+        public void ContainsTileOf_ValidHandAndTileIsNotInHand_ReturnsFalse()
+        {
+            CHandParser oHandParser = new CHandParser();
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList("111456789s");
+            Tile oTile = new Tile("1z");
+            Assert.IsFalse(_SUT.ContainsTileOf(oTilesList, oTile));
+        }
+
+        [TestMethod]
+        public void ContainsTileOf_ValidHandAndTileIsInHand_ReturnsTrue()
+        {
+            CHandParser oHandParser = new CHandParser();
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList("111456789s");
+            Tile oTile = new Tile("1s");
+            Assert.IsTrue(_SUT.ContainsTileOf(oTilesList, oTile));
+        }
+
+        [TestMethod]
+        public void ContainsTileOf_ValidHandAndTileIsNull_ReturnsFalse()
+        {
+            CHandParser oHandParser = new CHandParser();
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList("111456789s");
+            Assert.IsFalse(_SUT.ContainsTileOf(oTilesList, null));
+        }
+        #endregion
+
+        #region CountNumberOfTilesOf
+        [TestMethod]
+        public void CountNumberOfTilesOf_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.CountNumberOfTilesOf(null, ""));
+        }
+
+        [DataTestMethod]
+        [DataRow("111456789s", "1z", 0)]
+        [DataRow("111456789s", "", 0)]
+        [DataRow("111456789s", "9s", 1)]
+        [DataRow("111456789s", "1s", 3)]
+        public void CountNumberOfTilesOf_ValidHandAndTileIsNotInHand_ReturnsFalse(String psMahjongHand, String psTile, int pnExpectedResult)
+        {
+            CHandParser oHandParser = new CHandParser();
+            List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
+            Assert.AreEqual(pnExpectedResult,_SUT.CountNumberOfTilesOf(oTilesList, psTile));
+        }
+        #endregion
+
         #region CanBeStartOfARun
+        [TestMethod]
+        public void CanBeStartOfARun_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.CanBeStartOfARun(null, null));
+        }
+
         [DataTestMethod]
         [DataRow("123456789s", "1s")]
         [DataRow("123456789s", "2s")]
@@ -116,6 +194,12 @@ namespace Mahjong.Test
         #endregion
 
         #region RemoveSingleTileOf
+        [TestMethod]
+        public void RemoveSingleTileOf_TileListArgumentIsNull_ThrowArgumentNullException()
+        {
+            Assert.ThrowsException<ArgumentNullException>(() => _SUT.RemoveSingleTileOf(null, null));
+        }
+
         [DataTestMethod]
         [DataRow("123456789s", "1s", 0)]
         [DataRow("113456789s", "1s", 1)]

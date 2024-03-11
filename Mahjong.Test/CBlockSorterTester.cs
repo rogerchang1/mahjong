@@ -73,7 +73,7 @@ namespace Mahjong.Test
         {
             CHandParser oHandParser = new CHandParser();
             List<Tile> oTilesList = oHandParser.ParseTileStringToTileList(psMahjongHand);
-            List<List<Block>> oActualResults = _SUT.GetBlockCombinations(oTilesList);
+            List<List<Block>> oActualResults = _SUT.GetBlockCombinationsFromTileList(oTilesList);
 
 
             Block oBlock1 = _BlockParser.ParseBlock("456p");
