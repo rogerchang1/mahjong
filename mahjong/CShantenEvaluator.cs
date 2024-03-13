@@ -44,21 +44,22 @@ namespace Mahjong
         /// For evaluating a kokushi closed hand. Start at 13 and deduct 1 if it's in the kokushi tile list. Deduct only once again if a pair with any of kokushi tiles is found.
         /// nBlocksLeft = 4 implies there are no locked blocks, aka there is no closed kan or open calls.
         /// </summary>
-        /// <param name="poTilesList"></param>
+        /// <param name="oTempTilesList"></param>
         /// <param name="nBlocksLeft"></param>
         /// <returns></returns>
         public int EvaluateShanten(List<Tile> poTilesList, int nBlocksLeft = 4)
         {
-            _TilesManager.SortTiles(poTilesList);
+            List<Tile> oTempTilesList =_TilesManager.Clone(poTilesList);
+            _TilesManager.SortTiles(oTempTilesList);
 
             if(nBlocksLeft < 4 && nBlocksLeft > 0)
             {
-                return (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
+                return (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(oTempTilesList), nBlocksLeft);
             }
 
-            int shantenNormal = (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(poTilesList), nBlocksLeft);
-            int shantenChiitoi = EvaluateShantenForChiitoi(poTilesList);
-            int shantenKokushi = EvaluateShantenForKokushiMusou(_TilesManager.Clone(poTilesList));
+            int shantenNormal = (nBlocksLeft * 2) - EvaluateShantenNormal(_TilesManager.Clone(oTempTilesList), nBlocksLeft);
+            int shantenChiitoi = EvaluateShantenForChiitoi(oTempTilesList);
+            int shantenKokushi = EvaluateShantenForKokushiMusou(_TilesManager.Clone(oTempTilesList));
             return Math.Min(shantenNormal, Math.Min(shantenChiitoi, shantenKokushi));
         }
 
@@ -76,15 +77,12 @@ namespace Mahjong
             {
                 if (IsPairDetected(poTilesList, i))
                 {
-                    bHasPair = true;
                     List<Tile> tempHand = _TilesManager.Clone(poTilesList);
                     max = Math.Max(max, 1 + EvaluateShantenNormalHelper(RemovePairAtIndex(tempHand, i), nBlocksLeft));
                 }
             }
-            if (!bHasPair)
-            {
-                max = Math.Max(max, EvaluateShantenNormalHelper(poTilesList, nBlocksLeft));
-            }
+            //Evaluate in the scenario that there's no pair
+            max = Math.Max(max, EvaluateShantenNormalHelper(poTilesList, nBlocksLeft));
             return max;
         }
 

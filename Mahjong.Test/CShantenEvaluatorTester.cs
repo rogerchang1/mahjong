@@ -22,6 +22,7 @@ namespace Mahjong.Test
         }
 
         [DataTestMethod]
+        [DataRow("3466788p259s689m5z", 3)]
         [DataRow("555s555678p222z66z", -1)]
         [DataRow("555s567888p222z66z", -1)]
         [DataRow("555s566667p222z66z", -1)]
