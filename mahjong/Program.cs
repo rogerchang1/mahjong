@@ -13,11 +13,41 @@ namespace mahjong
             CHandParser oHandParser = new CHandParser();
             CTilesManager oTilesManager = new CTilesManager();
             CBlockParser oBlockParser = new CBlockParser();
-            CShantenEvaluator shantenEvaluator = new CShantenEvaluator();
+            CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
             CBlockSorter oBlockSorter = new CBlockSorter();
             CYakuEvaluator oYakuEvaluator = new CYakuEvaluator();
             CJSONHandLoader oJSONHandLoader = new CJSONHandLoader();
             CScoreEvaluator oScoreEvaluator = new CScoreEvaluator();
+            CTableManager oTableManager = new CTableManager();
+
+            Table oTable = new Table();
+            oTableManager.InitializeTable(oTable);
+            Hand oHandForTable = new Hand();
+            oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 13);
+            int nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
+            while (nShanten > -1 && oTable.Wall.Count > 0)
+            {
+                oTilesManager.SortTiles(oHandForTable.Tiles);
+                oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 1);
+                Console.Write("Hand: ");
+                printTileList(oHandForTable.Tiles);
+                nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
+                Console.Write("Shanten is " + nShanten + ". Discard which tile? ");
+                var name = Console.ReadLine();
+                Tile oTile = new Tile(name);
+                if (oTilesManager.ContainsTileOf(oHandForTable.Tiles, oTile)){
+                    oTilesManager.RemoveSingleTileOf(oHandForTable.Tiles, oTile);
+                }
+                else
+                {
+                    oHandForTable.Tiles.RemoveAt(13);
+                }
+                Console.WriteLine();
+            }
+            Console.Write("Hand: ");
+            printTileList(oHandForTable.Tiles);
+
+
             //Load the hand(s)
             //Hand oHand = oJSONHandLoader.CreateHandFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
             List<Hand> oHandList = oJSONHandLoader.CreateHandsFromJSONFile("R:/roger/coding/mahjong/mahjong/SampleHands/hand1.json");
@@ -26,7 +56,7 @@ namespace mahjong
                 printHandInformation(oHand);
 
                 //Evaluate the hand
-                int shanten = shantenEvaluator.EvaluateShanten(oHand);
+                int shanten = oShantenEvaluator.EvaluateShanten(oHand);
                 if(shanten == -1)
                 {
                     Score oScore = oScoreEvaluator.EvaluateScore(oHand);
