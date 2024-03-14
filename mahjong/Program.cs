@@ -19,6 +19,7 @@ namespace mahjong
             CJSONHandLoader oJSONHandLoader = new CJSONHandLoader();
             CScoreEvaluator oScoreEvaluator = new CScoreEvaluator();
             CTableManager oTableManager = new CTableManager();
+            CUkiereEvaluator oUkiereEvaluator = new CUkiereEvaluator();
 
             Table oTable = new Table();
             oTableManager.InitializeTable(oTable);
@@ -28,10 +29,19 @@ namespace mahjong
             while (nShanten > -1 && oTable.Wall.Count > 0)
             {
                 oTilesManager.SortTiles(oHandForTable.Tiles);
+
+                Console.WriteLine("Ukiere: ");
+                printTileListCondensed(oUkiereEvaluator.EvaluateUkiere(oHandForTable.Tiles));
+
                 oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 1);
                 Console.Write("Hand: ");
-                printTileList(oHandForTable.Tiles);
+                printTileListCondensed(oHandForTable.Tiles);
                 nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
+                if(nShanten == -1)
+                {
+                    oHandForTable.WinTile = oHandForTable.Tiles[13];
+                    break;
+                }
                 Console.Write("Shanten is " + nShanten + ". Discard which tile? ");
                 var name = Console.ReadLine();
                 Tile oTile = new Tile(name);
@@ -46,6 +56,11 @@ namespace mahjong
             }
             Console.Write("Hand: ");
             printTileList(oHandForTable.Tiles);
+            if (oShantenEvaluator.EvaluateShanten(oHandForTable) == -1)
+            {
+                Score oTableScore = oScoreEvaluator.EvaluateScore(oHandForTable);
+                printScore(oTableScore);
+            }
 
 
             //Load the hand(s)
@@ -87,6 +102,28 @@ namespace mahjong
                 Console.Write(pTileList[i].ToString() + " ");
             }
             Console.WriteLine();
+        }
+
+        public static void printTileListCondensed(List<Tile> pTileList)
+        {
+            if(pTileList.Count == 0)
+            {
+                return;
+            }
+            string sCurrentSuit = pTileList[0].suit;
+            string sTiles = "";
+            for (int i = 0; i < pTileList.Count; i++)
+            {
+                
+                if(sCurrentSuit != pTileList[i].suit)
+                {
+                    sTiles += sCurrentSuit;
+                    sCurrentSuit = pTileList[i].suit;
+                }
+                sTiles += pTileList[i].num;
+            }
+            sTiles += sCurrentSuit;
+            Console.WriteLine(sTiles);
         }
 
         public static void printLockedBlocks(Hand poHand)
