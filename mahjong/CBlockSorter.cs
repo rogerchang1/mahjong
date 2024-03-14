@@ -2,14 +2,17 @@
 using Mahjong.Model;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using static Mahjong.Enums;
+
+[assembly: InternalsVisibleTo("Mahjong.Test")]
 
 namespace Mahjong
 {
     /// <summary>
     /// This doesn't take into account of chiitoi and kokushi as they are special and they can only have a specific block combination
     /// </summary>
-    public class CBlockSorter
+    internal class CBlockSorter
     {
         private CTilesManager _TilesManager;
         private CBlockParser _BlockParser;
