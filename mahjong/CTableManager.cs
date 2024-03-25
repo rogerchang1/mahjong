@@ -24,6 +24,21 @@ namespace Mahjong
             LoadWall(poTable, oWallConfig);
         }
 
+        public Tile DrawNextTileFromWall(Table poTable)
+        {
+            if (poTable == null)
+            {
+                throw new ArgumentNullException(nameof(poTable));
+            }
+            if (!CanDrawFromWall(poTable))
+            {
+                return null;
+            }
+            Tile oTile = poTable.Wall[0];
+            poTable.Wall.RemoveAt(0);
+            return oTile;
+        }
+
         public void DrawTileFromWallToHand(Table poTable, Hand poHand, int pnNumTiles)
         {
             if (poTable == null)

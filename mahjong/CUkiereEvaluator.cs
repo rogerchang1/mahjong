@@ -48,7 +48,6 @@ namespace Mahjong
                         oUkiereList.Add(oTile);
                     }
                 }
-                
             }
             return oUkiereList;
         }

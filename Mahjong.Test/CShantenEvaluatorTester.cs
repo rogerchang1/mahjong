@@ -22,7 +22,6 @@ namespace Mahjong.Test
         }
 
         [DataTestMethod]
-        [DataRow("3466788p259s689m5z", 3)]
         [DataRow("555s555678p222z66z", -1)]
         [DataRow("555s567888p222z66z", -1)]
         [DataRow("555s566667p222z66z", -1)]
@@ -32,6 +31,7 @@ namespace Mahjong.Test
         [DataRow("147p258s123789m6z", 4)]
         [DataRow("147p258s1345789m", 4)]
         [DataRow("145p258s1345789m", 3)]
+        [DataRow("3466788p259s689m5z", 3)]
         [DataRow("11123p2378s2378m", 2)]
         [DataRow("111133p445566s9m", 1)]
         [DataRow("46s11222333p112z", 1)]
