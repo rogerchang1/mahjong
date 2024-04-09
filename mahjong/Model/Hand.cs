@@ -8,7 +8,7 @@ namespace Mahjong.Model
     {
         public List<Tile> Tiles = new List<Tile>();
         public List<Block> LockedBlocks = new List<Block>();
-        public List<Block> DiscardedTiles = new List<Block>();
+        public List<Tile> DiscardedTiles = new List<Tile>();
         public Tile WinTile = null;
         public Agari Agari = Agari.Unknown;
         public Wind SeatWind = Wind.Unknown;
