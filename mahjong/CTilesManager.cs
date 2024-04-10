@@ -402,6 +402,19 @@ namespace Mahjong
             return true;
         }
 
+        public List<Tile> GetTileListWithBlocksRemoved(List<Tile> poTileList, List<Block> poBlockList)
+        {
+            List<Tile> oTempTileList = Clone(poTileList);
+            foreach(Block oBlock in poBlockList)
+            {
+                foreach(Tile oTile in oBlock.Tiles)
+                {
+                    RemoveSingleTileOf(oTempTileList, oTile);
+                }
+            }
+            return oTempTileList;
+        }
+
         public List<Tile> Clone(List<Tile> poTileList)
         {
             if (poTileList == null)
