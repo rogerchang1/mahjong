@@ -24,6 +24,15 @@ namespace Mahjong
             LoadWall(poTable, oWallConfig);
         }
 
+        public void InitializeTableWithWallConfiguration(Table poTable, WallConfiguration poWallConfig)
+        {
+            if (poTable == null)
+            {
+                throw new ArgumentNullException(nameof(poTable));
+            }
+            LoadWall(poTable, poWallConfig);
+        }
+
         public Tile DrawNextTileFromWall(Table poTable)
         {
             if (poTable == null)
@@ -150,7 +159,7 @@ namespace Mahjong
                 oTilesToLoad.Add(new Tile("1z"));
                 oTilesToLoad.Add(new Tile("1z"));
             }
-            if (poWallConfig.LoadSouzu)
+            if (poWallConfig.LoadSouth)
             {
                 oTilesToLoad.Add(new Tile("2z"));
                 oTilesToLoad.Add(new Tile("2z"));
