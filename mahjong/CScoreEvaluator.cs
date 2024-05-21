@@ -94,6 +94,17 @@ namespace Mahjong
                     oScore = tempScore;
                 }
             }
+
+            //Chiitoi and Kokushi won't have any block combinations
+            if(oBlockCombinations.Count == 0)
+            {
+                Score tempScore = EvaluteScoreFromABlockCombination(poHand, null);
+                if (tempScore.Han > oScore.Han || (tempScore.Han == oScore.Han && tempScore.Fu > oScore.Fu))
+                {
+                    oScore = tempScore;
+                }
+            }
+
             return oScore;
         }
         public Score EvaluteScoreFromABlockCombination(Hand poHand, List<Block> poBlockCombination)
@@ -111,6 +122,7 @@ namespace Mahjong
             int han = poHand.DoraCount + poHand.AkaDoraCount + poHand.UraDoraCount;
             Boolean bIsPinfu = false;
             Boolean bIsChiitoi = false;
+            Boolean bIsKokushi = false;
             foreach (Yaku yaku in oYakuList)
             {
                 han += YAKUVALUE[yaku];
@@ -121,6 +133,10 @@ namespace Mahjong
                 else if (yaku == Yaku.Chiitoi)
                 {
                     bIsChiitoi = true;
+                }
+                else if (yaku == Yaku.KokushiMusou)
+                {
+                    bIsKokushi = true;
                 }
             }
             oScore.Han = han;
@@ -181,11 +197,15 @@ namespace Mahjong
 
             return oScore;
         }
-        public int CalculateFu(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false)
+        public int CalculateFu(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false, Boolean pbIsKokushiMusou = false)
         {
             if (pbIsChiitoi)
             {
                 return 25;
+            }
+            if (pbIsKokushiMusou)
+            {
+                return 20;
             }
             if (pbIsPinfu)
             {

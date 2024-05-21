@@ -21,46 +21,46 @@ namespace mahjong
             CTableManager oTableManager = new CTableManager();
             CUkiereEvaluator oUkiereEvaluator = new CUkiereEvaluator();
 
-            Table oTable = new Table();
-            oTableManager.InitializeTable(oTable);
-            Hand oHandForTable = new Hand();
-            oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 13);
-            int nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
-            while (nShanten > -1 && oTable.Wall.Count > 0)
-            {
-                oTilesManager.SortTiles(oHandForTable.Tiles);
+            //Table oTable = new Table();
+            //oTableManager.InitializeTable(oTable);
+            //Hand oHandForTable = new Hand();
+            //oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 13);
+            //int nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
+            //while (nShanten > -1 && oTable.Wall.Count > 0)
+            //{
+            //    oTilesManager.SortTiles(oHandForTable.Tiles);
 
-                Console.WriteLine("Ukiere: ");
-                printTileListCondensed(oUkiereEvaluator.EvaluateUkiere(oHandForTable.Tiles));
+            //    Console.WriteLine("Ukiere: ");
+            //    printTileListCondensed(oUkiereEvaluator.EvaluateUkiere(oHandForTable.Tiles));
 
-                oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 1);
-                Console.Write("Hand: ");
-                printTileListCondensed(oHandForTable.Tiles);
-                nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
-                if(nShanten == -1)
-                {
-                    oHandForTable.WinTile = oHandForTable.Tiles[13];
-                    break;
-                }
-                Console.Write("Shanten is " + nShanten + ". Discard which tile? ");
-                var name = Console.ReadLine();
-                Tile oTile = new Tile(name);
-                if (oTilesManager.ContainsTileOf(oHandForTable.Tiles, oTile)){
-                    oTilesManager.RemoveSingleTileOf(oHandForTable.Tiles, oTile);
-                }
-                else
-                {
-                    oHandForTable.Tiles.RemoveAt(13);
-                }
-                Console.WriteLine();
-            }
-            Console.Write("Hand: ");
-            printTileList(oHandForTable.Tiles);
-            if (oShantenEvaluator.EvaluateShanten(oHandForTable) == -1)
-            {
-                Score oTableScore = oScoreEvaluator.EvaluateScore(oHandForTable);
-                printScore(oTableScore);
-            }
+            //    oTableManager.DrawTileFromWallToHand(oTable, oHandForTable, 1);
+            //    Console.Write("Hand: ");
+            //    printTileListCondensed(oHandForTable.Tiles);
+            //    nShanten = oShantenEvaluator.EvaluateShanten(oHandForTable);
+            //    if(nShanten == -1)
+            //    {
+            //        oHandForTable.WinTile = oHandForTable.Tiles[13];
+            //        break;
+            //    }
+            //    Console.Write("Shanten is " + nShanten + ". Discard which tile? ");
+            //    var name = Console.ReadLine();
+            //    Tile oTile = new Tile(name);
+            //    if (oTilesManager.ContainsTileOf(oHandForTable.Tiles, oTile)){
+            //        oTilesManager.RemoveSingleTileOf(oHandForTable.Tiles, oTile);
+            //    }
+            //    else
+            //    {
+            //        oHandForTable.Tiles.RemoveAt(13);
+            //    }
+            //    Console.WriteLine();
+            //}
+            //Console.Write("Hand: ");
+            //printTileList(oHandForTable.Tiles);
+            //if (oShantenEvaluator.EvaluateShanten(oHandForTable) == -1)
+            //{
+            //    Score oTableScore = oScoreEvaluator.EvaluateScore(oHandForTable);
+            //    printScore(oTableScore);
+            //}
 
 
             //Load the hand(s)

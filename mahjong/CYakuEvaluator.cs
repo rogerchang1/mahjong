@@ -164,7 +164,7 @@ namespace Mahjong
             {
                 if (IsChiitoi(poHand, poBlockConfiguration))
                 {
-                    oYakuCombination.Add(Yaku.Iipeikou);
+                    oYakuCombination.Add(Yaku.Chiitoi);
                 }
                 if (IsIipeikou(poHand, poBlockConfiguration))
                 {
@@ -253,7 +253,7 @@ namespace Mahjong
 
         public Boolean IsSuuankou(Hand poHand, List<Block> poBlockCombination)
         {
-            if (!IsHandClosedAtTenpai(poHand))
+            if (!IsHandClosedAtTenpai(poHand) || poBlockCombination == null)
             {
                 return false;
             }
@@ -276,6 +276,10 @@ namespace Mahjong
 
         public Boolean IsDaisangen(Hand poHand, List<Block> poBlockCombination)
         {
+            if(poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bChunFound = false;
             Boolean bHakuFound = false;
             Boolean bHatsuFound = false;
@@ -302,6 +306,10 @@ namespace Mahjong
 
         public Boolean IsDaisuushii(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bEastFound = false;
             Boolean bSouthFound = false;
             Boolean bWestFound = false;
@@ -333,6 +341,10 @@ namespace Mahjong
 
         public Boolean IsShousuushii(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bEastFound = false;
             Boolean bSouthFound = false;
             Boolean bWestFound = false;
@@ -489,7 +501,10 @@ namespace Mahjong
             {
                 return false;
             }
-
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bWinTileIsInRyanmen = false;
 
             foreach (Block oBlock in poBlockCombination)
@@ -529,6 +544,10 @@ namespace Mahjong
         
         public Boolean IsTanyao(List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             for (int i = 0; i < poBlockCombination.Count; i++)
             {
                 Block oBlock = poBlockCombination[i];
@@ -545,6 +564,10 @@ namespace Mahjong
 
         public Boolean IsJunchan(List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             //If it's all Koutsu, that's a yakuman.
             Boolean bHasShuntsu = false;
             
@@ -578,6 +601,10 @@ namespace Mahjong
 
         public Boolean IsChanta(List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             //If it's all Koutsu, that's honroutou
             Boolean bHasShuntsu = false;
             Boolean bHasHonorBlock = false;
@@ -621,7 +648,11 @@ namespace Mahjong
         }
 
         public Boolean IsSanshokuDoujun(List<Block> poBlockCombination)
-        {            
+        {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             for (int i = 0; i < poBlockCombination.Count; i++)
             {
                 Block oBlock = poBlockCombination[i];
@@ -657,6 +688,10 @@ namespace Mahjong
 
         public Boolean IsIttsuu(List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             for (int i = 0; i < poBlockCombination.Count; i++)
             {
                 Block oBlock = poBlockCombination[i];
@@ -696,7 +731,10 @@ namespace Mahjong
             {
                 return false;
             }
-
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             int nShuntsuBlocks = poBlockCombination.Count(n => n.Type == Mentsu.Shuntsu);
 
             if (_ShantenEvaluator.EvaluateShantenForChiitoi(poHand.Tiles) == -1 && nShuntsuBlocks == 4)
@@ -721,7 +759,10 @@ namespace Mahjong
             {
                 return false;
             }
-
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bIipeikouFound = false;
 
             for(int i = 0; i < poBlockCombination.Count; i++)
@@ -755,6 +796,10 @@ namespace Mahjong
 
         public Boolean IsToitoi(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bHasOpenBlocks = false;
 
             if(poHand.LockedBlocks.Count > 0)
@@ -806,7 +851,10 @@ namespace Mahjong
 
         public Boolean IsSanshokuDoukou(Hand poHand, List<Block> poBlockCombination)
         {
-
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             int nNum1 = 0;
             int nCount1 = 0;
             int nNum2 = 0;
@@ -838,6 +886,10 @@ namespace Mahjong
 
         public Boolean IsSankantsu(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             int count = 0;
             for (int i = 0; i < poBlockCombination.Count; i++)
             {
@@ -851,6 +903,10 @@ namespace Mahjong
 
         public Boolean IsSanankou(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             int count = 0;
             ////These two booleans are to help the scenario: Ron on a shape like 11155577s333345p with 3p as the agari tile. 
             Boolean bHasKoutsuWithWinningTileOnRon = false;
@@ -905,7 +961,11 @@ namespace Mahjong
 
         public Boolean IsChun(Hand poHand, List<Block> poBlockCombination)
         {
-           foreach(Block oBlock in poBlockCombination)
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
+            foreach (Block oBlock in poBlockCombination)
             {
                 if((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Chun)
                 {
@@ -917,6 +977,10 @@ namespace Mahjong
 
         public Boolean IsHaku(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             foreach (Block oBlock in poBlockCombination)
             {
                 if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Haku)
@@ -929,6 +993,10 @@ namespace Mahjong
 
         public Boolean IsHatsu(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             foreach (Block oBlock in poBlockCombination)
             {
                 if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && DragonTileToEnum(oBlock.Tiles[0]) == Dragon.Hatsu)
@@ -942,6 +1010,10 @@ namespace Mahjong
         public Boolean IsTon(Hand poHand, List<Block> poBlockCombination)
         {
             if(poHand.RoundWind != Wind.East && poHand.SeatWind != Wind.East)
+            {
+                return false;
+            }
+            if (poBlockCombination == null)
             {
                 return false;
             }
@@ -961,6 +1033,10 @@ namespace Mahjong
             {
                 return false;
             }
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             foreach (Block oBlock in poBlockCombination)
             {
                 if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.South)
@@ -974,6 +1050,10 @@ namespace Mahjong
         public Boolean IsSha(Hand poHand, List<Block> poBlockCombination)
         {
             if (poHand.RoundWind != Wind.West && poHand.SeatWind != Wind.West)
+            {
+                return false;
+            }
+            if (poBlockCombination == null)
             {
                 return false;
             }
@@ -993,6 +1073,10 @@ namespace Mahjong
             {
                 return false;
             }
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             foreach (Block oBlock in poBlockCombination)
             {
                 if ((oBlock.Type == Mentsu.Koutsu || oBlock.Type == Mentsu.Kantsu) && WindTileToEnum(oBlock.Tiles[0]) == Wind.North)
@@ -1005,6 +1089,10 @@ namespace Mahjong
 
         public Boolean IsShousangen(Hand poHand, List<Block> poBlockCombination)
         {
+            if (poBlockCombination == null)
+            {
+                return false;
+            }
             Boolean bChunFound = false;
             Boolean bHakuFound = false;
             Boolean bHatsuFound = false;
