@@ -26,7 +26,7 @@ namespace Mahjong
         public List<List<Block>> GetBlockCombinations(Hand poHand)
         {
             CShantenEvaluator oShantenEvaluator = new CShantenEvaluator();
-            if (oShantenEvaluator.EvaluateShanten(poHand.Tiles) != -1)
+            if (oShantenEvaluator.EvaluateShanten(poHand) != -1)
             {
                 throw new BlockSortException();
             }

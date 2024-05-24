@@ -2,6 +2,23 @@
 	"Hands":
 	[
 		{
+			"Hand":"99p123456789s",
+			"LockedBlocks":
+				{
+					"OpenBlocks":["678p"],
+					"ClosedBlocks":[]
+				},
+			"WinTile":"6s",
+			"Agari":"Ron",
+			"RoundWind":"east",
+			"SeatWind":"South",
+			"IsRiichi":"False",
+			"IsDoubleRiichi":"False",
+			"IsIppatsu":"False",
+			"IsRinshan":"False",
+			"DoraCount":0,
+		},
+        {
 			"Hand":"1144338899s1122z",
 			"LockedBlocks":
 				{

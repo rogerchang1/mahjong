@@ -77,7 +77,7 @@ namespace Mahjong
         public Score EvaluateScore(Hand poHand)
         {
 
-            if (_ShantenEvaluator.EvaluateShanten(poHand.Tiles) != -1)
+            if (_ShantenEvaluator.EvaluateShanten(poHand) != -1)
             {
                 //TODO throw exception instead?
                 return null;
@@ -109,7 +109,7 @@ namespace Mahjong
         }
         public Score EvaluteScoreFromABlockCombination(Hand poHand, List<Block> poBlockCombination)
         {
-            if (_ShantenEvaluator.EvaluateShanten(poHand.Tiles) != -1)
+            if (_ShantenEvaluator.EvaluateShanten(poHand) != -1)
             {
                 //TODO throw exception instead?
                 return null;

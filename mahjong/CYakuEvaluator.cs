@@ -702,18 +702,18 @@ namespace Mahjong
                     Boolean b4Found = false;
                     Boolean b7Found = false;
 
-                    b1Found = oBlock.Tiles[0].num == 1 ? true : false;
-                    b4Found = oBlock.Tiles[0].num == 4 ? true : false;
-                    b7Found = oBlock.Tiles[0].num == 7 ? true : false;
+                    b1Found = oBlock.Tiles[0].num == 1 ? true : b1Found;
+                    b4Found = oBlock.Tiles[0].num == 4 ? true : b4Found;
+                    b7Found = oBlock.Tiles[0].num == 7 ? true : b7Found;
 
                     for (int j = i + 1; j < poBlockCombination.Count; j++)
                     {
                         Block oBlock2 = poBlockCombination[j];
                         if (oBlock2.Type == Mentsu.Shuntsu && oBlock2.Tiles[0].suit == nSuitToCompare)
                         {
-                            b1Found = oBlock2.Tiles[0].num == 1 && b1Found == false ? true : false;
-                            b4Found = oBlock2.Tiles[0].num == 4 && b4Found == false ? true : false;
-                            b7Found = oBlock2.Tiles[0].num == 7 && b7Found == false ? true : false;
+                            b1Found = oBlock2.Tiles[0].num == 1 && b1Found == false ? true : b1Found;
+                            b4Found = oBlock2.Tiles[0].num == 4 && b4Found == false ? true : b4Found;
+                            b7Found = oBlock2.Tiles[0].num == 7 && b7Found == false ? true : b7Found;
                         }
                     }
                     if (b1Found && b4Found && b7Found)
