@@ -238,7 +238,7 @@ namespace Mahjong
             Tsuuiisou,
             Chinroutou,
             Ryuuiisou,
-            ChuurenPotou,
+            ChuurenPoutou,
             Suukantsu,
             Tenhou,
             Chiihou,

@@ -84,7 +84,7 @@ namespace Mahjong
             }
             if (IsChuurenPoutou(poHand, poBlockConfiguration))
             {
-                oYakuCombination.Add(Yaku.ChuurenPotou);
+                oYakuCombination.Add(Yaku.ChuurenPoutou);
             }
             if (IsSuukantsu(poHand, poBlockConfiguration))
             {
@@ -663,18 +663,18 @@ namespace Mahjong
                     Boolean bSouzuFound = false;
                     Boolean bManzuFound = false;
 
-                    bPinzuFound = oBlock.Tiles[0].suit == "p" ? true : false;
-                    bSouzuFound = oBlock.Tiles[0].suit == "s" ? true : false;
-                    bManzuFound = oBlock.Tiles[0].suit == "m" ? true : false;
+                    bPinzuFound = oBlock.Tiles[0].suit == "p" ? true : bPinzuFound;
+                    bSouzuFound = oBlock.Tiles[0].suit == "s" ? true : bSouzuFound;
+                    bManzuFound = oBlock.Tiles[0].suit == "m" ? true : bManzuFound;
 
                     for (int j = i + 1; j < poBlockCombination.Count; j++)
                     {
                         Block oBlock2 = poBlockCombination[j];
                         if (oBlock2.Type == Mentsu.Shuntsu && oBlock2.Tiles[0].num == nNumToCompare)
                         {
-                            bPinzuFound = oBlock2.Tiles[0].suit == "p" && bPinzuFound == false ? true : false;
-                            bSouzuFound = oBlock2.Tiles[0].suit == "s" && bSouzuFound == false ? true : false;
-                            bManzuFound = oBlock2.Tiles[0].suit == "m" && bManzuFound == false ? true : false;
+                            bPinzuFound = oBlock2.Tiles[0].suit == "p" && bPinzuFound == false ? true : bPinzuFound;
+                            bSouzuFound = oBlock2.Tiles[0].suit == "s" && bSouzuFound == false ? true : bSouzuFound;
+                            bManzuFound = oBlock2.Tiles[0].suit == "m" && bManzuFound == false ? true : bManzuFound;
                         }
                     }
                     if(bPinzuFound && bSouzuFound && bManzuFound)

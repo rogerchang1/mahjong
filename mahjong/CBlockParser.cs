@@ -55,7 +55,17 @@ namespace Mahjong
                 {
                     return Mentsu.Koutsu;
                 }
-                if (poBlock.Tiles[0].CompareTo(poBlock.Tiles[1]) == -1 && poBlock.Tiles[1].CompareTo(poBlock.Tiles[2]) == -1)
+                int divisor = 1;
+                if(poBlock.Tiles[0].suit == "s")
+                {
+                    divisor = 10;
+                }
+                if (poBlock.Tiles[0].suit == "m")
+                {
+                    divisor = 100;
+                }
+
+                if (poBlock.Tiles[0].CompareTo(poBlock.Tiles[1])/divisor == -1 && poBlock.Tiles[1].CompareTo(poBlock.Tiles[2]) / divisor == -1)
                 {
                     return Mentsu.Shuntsu;
                 }

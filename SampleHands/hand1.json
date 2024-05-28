@@ -2,13 +2,13 @@
 	"Hands":
 	[
 		{
-			"Hand":"99p123456789s",
+			"Hand":"12399p123789s",
 			"LockedBlocks":
 				{
-					"OpenBlocks":["678p"],
+					"OpenBlocks":["123m"],
 					"ClosedBlocks":[]
 				},
-			"WinTile":"6s",
+			"WinTile":"3s",
 			"Agari":"Ron",
 			"RoundWind":"east",
 			"SeatWind":"South",

@@ -58,7 +58,7 @@ namespace Mahjong
             { Yaku.Tsuuiisou, 13 },
             { Yaku.Chinroutou, 13 },
             { Yaku.Ryuuiisou, 13 },
-            { Yaku.ChuurenPotou, 13 },
+            { Yaku.ChuurenPoutou, 13 },
             { Yaku.Suukantsu, 13 },
             { Yaku.Tenhou, 13 },
             { Yaku.Chiihou, 13 },
