@@ -36,6 +36,11 @@ namespace Mahjong.Test
         [DataRow("111133p445566s9m", 1)]
         [DataRow("46s11222333p112z", 1)]
         [DataRow("46s11222333p789m", 0)]
+        [DataRow("24567p33355678s", 0)] //24567 pattern
+        [DataRow("2455567p333678s", 0)] //24567 pattern
+        [DataRow("24556677p33678s", 0)] //24567 pattern
+        [DataRow("24455667p33678s", 0)] //24567 pattern
+        [DataRow("45679p33355678s", 0)]
         [DataRow("456s11222333p789m", -1)]
         [DataRow("111333p445566s99m", -1)]
         [DataRow("115588m147p2588s", 2)] //chiitoi

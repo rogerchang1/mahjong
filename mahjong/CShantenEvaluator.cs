@@ -106,9 +106,21 @@ namespace Mahjong
                     //max = Math.Max(max, 2 + EvaluateShantenNormal(RemoveSequenceAtIndex(poTilesList.Clone(), i), nBlocksLeft - 1));
                 }else if (IsSequenceDetected(poTilesList, i) && nBlocksLeft > 0)
                 {
+                    //edgecase for a 24567 pattern. we'll want to remove 567 instead of 456 to prioritize the partial shape of 24.
+                    //what about a 2455567 pattern or 244567 pattern?
+                    if(IsThereA24567Pattern(poTilesList,i))
+                    {
+                        Tile nextTile = _TilesManager.GetNextIncreasingTileInTheSameSuit(poTilesList, poTilesList[i]);
+                        int nextTileIndex = _TilesManager.FindFirstIndexOfTile(poTilesList, nextTile);
+                        RemoveSequenceAtIndex(poTilesList, nextTileIndex);
+                    }
+                    else
+                    {
+                        RemoveSequenceAtIndex(poTilesList, i);
+                    }
+
                     max += 2;
                     nBlocksLeft--;
-                    RemoveSequenceAtIndex(poTilesList, i);
                     i--;
                 }
                 i++;
@@ -133,6 +145,38 @@ namespace Mahjong
                 i++;
             }
             return max;
+        }
+
+        //edgecase for a 24567 pattern. we'll want to remove 567 instead of 456 to prioritize the partial shape of 24.
+        //Because we are going in ascending order when evaluating shanten, we might spot 456 and remove it, leaving 27 which won't amount to anything.
+        //This function is assuming index would be the 4 in a 24567 pattern.
+        //This is a suboptimal solution, might need to do dynamic programming refactor later in the future.
+        private bool IsThereA24567Pattern(List<Tile> poTilesList, int pnIndex)
+        {
+            Tile prevTile = _TilesManager.GetPreviousDecreasingTileInTheSameSuit(poTilesList, poTilesList[pnIndex]);
+            if(prevTile == null || prevTile.num != poTilesList[pnIndex].num - 2)
+            {
+                return false;
+            }
+
+            Tile nextTile = _TilesManager.GetNextIncreasingTileInTheSameSuit(poTilesList, poTilesList[pnIndex]);
+            if(nextTile == null || nextTile.num != poTilesList[pnIndex].num + 1)
+            {
+                return false;
+            }
+            Tile nextTile2 = _TilesManager.GetNextIncreasingTileInTheSameSuit(poTilesList, nextTile);
+            if (nextTile2 == null || nextTile2.num != nextTile.num + 1)
+            {
+                return false;
+            }
+            int nextTileIndex = _TilesManager.FindFirstIndexOfTile(poTilesList,nextTile);
+            int nextTile2Index = _TilesManager.FindFirstIndexOfTile(poTilesList, nextTile2);
+            if (IsSequenceDetected(poTilesList, nextTileIndex) && !IsSequenceDetected(poTilesList, nextTile2Index))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public int EvaluateShantenForChiitoi(List<Tile> poTilesList)

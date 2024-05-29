@@ -84,6 +84,33 @@ namespace Mahjong
             return null;
         }
 
+        public Tile GetPreviousDecreasingTileInTheSameSuit(List<Tile> poTileList, Tile poTile)
+        {
+            if (poTileList == null)
+            {
+                throw new ArgumentNullException(nameof(poTileList));
+            }
+            if (poTile == null)
+            {
+                return null;
+            }
+
+            SortTiles(poTileList);
+
+            int index = FindFirstIndexOfTile(poTileList, poTile);
+            if (index == -1)
+            {
+                return null;
+            }
+            for (int i = index - 1; i >= 0; i--)
+            {
+                if (poTileList[i].num != poTileList[index].num && poTileList[i].suit == poTileList[index].suit)
+                {
+                    return poTileList[i];
+                }
+            }
+            return null;
+        }
 
         public int CountNumberOfTilesOf(List<Tile> poTileList, Tile poTile)
         {
