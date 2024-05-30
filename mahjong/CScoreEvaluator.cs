@@ -120,6 +120,19 @@ namespace Mahjong
             Score oScore = new Score();
             oScore.YakuList = oYakuList;
             int han = poHand.DoraCount + poHand.AkaDoraCount + poHand.UraDoraCount;
+
+
+            Boolean bHasOpenBlocks = false;
+
+            for(int i = 0; i < poHand.LockedBlocks.Count; i++)
+            {
+                if(poHand.LockedBlocks[i].IsOpen)
+                {
+                    bHasOpenBlocks = true;
+                    break;
+                }
+            }
+
             Boolean bIsPinfu = false;
             Boolean bIsChiitoi = false;
             Boolean bIsKokushi = false;
@@ -137,6 +150,9 @@ namespace Mahjong
                 else if (yaku == Yaku.KokushiMusou)
                 {
                     bIsKokushi = true;
+                }else if((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu) && bHasOpenBlocks)
+                {
+                    han--;
                 }
             }
             oScore.Han = han;
