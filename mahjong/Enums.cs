@@ -195,6 +195,14 @@ namespace Mahjong
             }
         }
 
+        public enum KanType
+        {
+            None,
+            Ankan,
+            Daiminkan,
+            Shouminkan
+        }
+
         public enum Yaku
         {
             Riichi,
