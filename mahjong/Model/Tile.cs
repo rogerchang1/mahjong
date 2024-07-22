@@ -11,6 +11,12 @@
             suit = pSuit;
         }
 
+        public Tile(Tile poTile)
+        {
+            num = poTile.num;
+            suit = poTile.suit; 
+        }
+
         public Tile(int compareValue)
         {
             if (compareValue % 1000 >= 1)

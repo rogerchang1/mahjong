@@ -23,11 +23,6 @@ namespace Mahjong
         {
             List<Tile> oWaits = new List<Tile>();
 
-            if(poHand.Tiles.Count == 14)
-            {
-                return oWaits;
-            }
-
             int nCurShanten = _ShantenEvaluator.EvaluateShanten(poHand);
 
             if (nCurShanten == -1)
