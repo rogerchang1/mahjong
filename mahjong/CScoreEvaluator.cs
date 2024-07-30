@@ -150,9 +150,26 @@ namespace Mahjong
                 else if (yaku == Yaku.KokushiMusou)
                 {
                     bIsKokushi = true;
-                }else if((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu) && bHasOpenBlocks)
+                }
+                else if ((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu) && bHasOpenBlocks)
                 {
                     han--;
+                }
+                else if (yaku == Yaku.YakuhaiTon && poHand.RoundWind == Enums.Wind.East && poHand.SeatWind == Enums.Wind.East)
+                {
+                    han++;
+                }
+                else if (yaku == Yaku.YakuhaiNan && poHand.RoundWind == Enums.Wind.South && poHand.SeatWind == Enums.Wind.South)
+                {
+                    han++;
+                }
+                else if (yaku == Yaku.YakuhaiSha && poHand.RoundWind == Enums.Wind.West && poHand.SeatWind == Enums.Wind.West)
+                {
+                    han++;
+                }
+                else if (yaku == Yaku.YakuhaiPei && poHand.RoundWind == Enums.Wind.North && poHand.SeatWind == Enums.Wind.North)
+                {
+                    han++;
                 }
             }
             oScore.Han = han;
