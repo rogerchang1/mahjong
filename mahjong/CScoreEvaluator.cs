@@ -151,7 +151,7 @@ namespace Mahjong
                 {
                     bIsKokushi = true;
                 }
-                else if ((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu) && bHasOpenBlocks)
+                else if ((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu || yaku == Yaku.Ittsuu || yaku == Yaku.SanshokuDoujun) && bHasOpenBlocks)
                 {
                     han--;
                 }
