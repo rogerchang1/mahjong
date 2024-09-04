@@ -11,5 +11,7 @@ namespace Mahjong.Model
         public int SinglePayment = 0;
         public Dictionary<string, int> AllPayment = new Dictionary<string, int>() { { "Regular", 0 }, {"Dealer", 0 }};
         public List<Yaku> YakuList = new List<Yaku>();
+        public List<string> HanBreakdown = new List<string>();
+        public List<string> FuBreakdown = new List<string>();
     }
 }

@@ -138,7 +138,8 @@ namespace Mahjong
             Boolean bIsKokushi = false;
             foreach (Yaku yaku in oYakuList)
             {
-                han += YAKUVALUE[yaku];
+                
+                int yakuHan = YAKUVALUE[yaku];
                 if (yaku == Yaku.Pinfu)
                 {
                     bIsPinfu = true;
@@ -153,27 +154,30 @@ namespace Mahjong
                 }
                 else if ((yaku == Yaku.Chankan || yaku == Yaku.Junchan || yaku == Yaku.Honitsu || yaku == Yaku.Chinitsu || yaku == Yaku.Ittsuu || yaku == Yaku.SanshokuDoujun) && bHasOpenBlocks)
                 {
-                    han--;
+                    yakuHan--;
                 }
                 else if (yaku == Yaku.YakuhaiTon && poHand.RoundWind == Enums.Wind.East && poHand.SeatWind == Enums.Wind.East)
                 {
-                    han++;
+                    yakuHan++;
                 }
                 else if (yaku == Yaku.YakuhaiNan && poHand.RoundWind == Enums.Wind.South && poHand.SeatWind == Enums.Wind.South)
                 {
-                    han++;
+                    yakuHan++;
                 }
                 else if (yaku == Yaku.YakuhaiSha && poHand.RoundWind == Enums.Wind.West && poHand.SeatWind == Enums.Wind.West)
                 {
-                    han++;
+                    yakuHan++;
                 }
                 else if (yaku == Yaku.YakuhaiPei && poHand.RoundWind == Enums.Wind.North && poHand.SeatWind == Enums.Wind.North)
                 {
-                    han++;
+                    yakuHan++;
                 }
+                oScore.HanBreakdown.Add(yaku.ToString() + " - " + yakuHan + " han");
+                han += yakuHan;
             }
             oScore.Han = han;
             oScore.Fu = CalculateFu(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
+            oScore.FuBreakdown = GetFuBreakdown(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
             double oPayment = 0;
 
             if(han == 5 || (han == 4 && oScore.Fu >= 40) || (han == 3 && oScore.Fu >= 70) )
@@ -323,6 +327,135 @@ namespace Mahjong
             nFu = (int)(Math.Ceiling((decimal)nFu / 10) * 10);
 
             return nFu;
+        }
+
+        public List<string> GetFuBreakdown(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false, Boolean pbIsKokushiMusou = false)
+        {
+            List<string> oFuBreakdown = new List<string>() { "Base fu - 20 fu" };
+            if (pbIsChiitoi)
+                {
+                    return new List<string>() { "Chiitoitsu - 25 fu"};
+                }
+                if (pbIsKokushiMusou)
+                {
+                    return new List<string>();
+                }
+                if (pbIsPinfu)
+                {
+                    if (poHand.Agari == Agari.Tsumo)
+                    {
+                    return new List<string>() { "Base fu - 20 fu" };
+                }
+                    return new List<string>() { "Base fu - 20 fu", "Closed Ron - 10 fu" };
+            }
+                int nFu = 20;
+                if (poHand.Agari == Agari.Tsumo)
+                {
+                    oFuBreakdown.Add("Tsumo - 2 fu");
+                    nFu += 2;
+                }
+                if (poHand.Agari == Agari.Ron && _TilesManager.IsHandClosed(poHand))
+                {
+                    oFuBreakdown.Add("Closed Ron - 10 fu");
+                    nFu += 10;
+            }
+            Boolean bIsWinTileFuCounted = false;
+
+            foreach (Block oBlock in poBlockCombination)
+            {
+                int nBlockFu = 0;
+                if (oBlock.Type == Mentsu.Unknown)
+                {
+                    throw new Exception("Unknown Block Type");
+                }
+
+                if (oBlock.Type == Mentsu.Kantsu || oBlock.Type == Mentsu.Koutsu)
+                {
+                    nBlockFu = 2;
+                    string sBlock = "";
+                    if (oBlock.IsOpen == false && !(poHand.Agari == Agari.Ron && _TilesManager.ContainsTileOf(oBlock.Tiles, poHand.WinTile)))
+                    {
+                        nBlockFu = nBlockFu * 2;
+                        sBlock += "Closed ";
+                    
+                    }
+                    else
+                    {
+                        sBlock += "Open ";
+                    }
+                    if (_TilesManager.IsTerminalTile(oBlock.Tiles[0]) || _TilesManager.IsHonorTile(oBlock.Tiles[0]))
+                    {
+                        nBlockFu = nBlockFu * 2;
+                        sBlock += "Terminal/Honor ";
+                    }
+                    if (oBlock.Type == Mentsu.Kantsu)
+                    {
+                        nBlockFu = nBlockFu * 4;
+                        sBlock += "Quad ";
+                    }
+                    else
+                    {
+                        sBlock += "Triplet ";
+                    }
+                    sBlock += "- " + nBlockFu + " fu";
+                    oFuBreakdown.Add(sBlock);
+                }
+                else if (oBlock.Type == Mentsu.Shuntsu)
+                {
+                    if (_TilesManager.IsTileAKanChan(oBlock.Tiles, poHand.WinTile) || _TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
+                    {
+                        if (!bIsWinTileFuCounted)
+                        {
+                            nBlockFu += 2;
+                            bIsWinTileFuCounted = true;
+                            if(_TilesManager.IsTileAKanChan(oBlock.Tiles, poHand.WinTile))
+                            {
+                                oFuBreakdown.Add("Closed Wait - 2 fu");
+                            }else if(_TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
+                            {
+                                oFuBreakdown.Add("Edge Wait - 2 fu");
+                            }
+                            
+                        }
+                    }
+                }
+                else
+                {
+                    //Jantou is left
+                    if (_TilesManager.ContainsTileOf(oBlock.Tiles, poHand.WinTile))
+                    {
+                        if (!bIsWinTileFuCounted)
+                        {
+                            nBlockFu += 2;
+                            bIsWinTileFuCounted = true;
+                            oFuBreakdown.Add("Pair Wait - 2 fu");
+                    }
+                    }
+                    if (_TilesManager.IsDragonTile(oBlock.Tiles[0]))
+                    {
+                        nBlockFu += 2;
+                        oFuBreakdown.Add("Dragon Pair - 2 fu");
+                    }
+                    if (oBlock.Tiles[0].CompareTo(WindEnumToTile(poHand.RoundWind)) == 0)
+                    {
+                        nBlockFu += 2;
+                        oFuBreakdown.Add("Round Wind Pair - 2 fu");
+                    }
+                    if (oBlock.Tiles[0].CompareTo(WindEnumToTile(poHand.SeatWind)) == 0)
+                    {
+                        nBlockFu += 2;
+                        oFuBreakdown.Add("Seat Wind Pair - 2 fu");
+                    }
+                }
+                nFu += nBlockFu;
+            }
+            int oldFu = nFu;
+            nFu = (int)(Math.Ceiling((decimal)nFu / 10) * 10);
+            int roundUp = nFu - oldFu;
+            oFuBreakdown.Add("Round Up - " + roundUp + " fu");
+
+            return oFuBreakdown;
+            
         }
     }
 }
