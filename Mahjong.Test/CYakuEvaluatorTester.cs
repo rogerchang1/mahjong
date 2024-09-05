@@ -53,5 +53,19 @@ namespace Mahjong.Test
 
             Assert.IsFalse(_SUT.IsTanyao(oBlockCombination));
         }
+
+        [TestMethod]
+        public void IsRyuuiisou_HandIsIsRyuuiisou_ReturnTrue()
+        {
+            Hand oHand = _HandParser.ParseHand("22334466888s66z");
+            Assert.IsTrue(_SUT.IsRyuuiisou(oHand, new List<Block>()));
+        }
+
+        [TestMethod]
+        public void IsRyuuiisou_HandIsIsNotRyuuiisou_ReturnFalse()
+        {
+            Hand oHand = _HandParser.ParseHand("23344566888s66z");
+            Assert.IsFalse(_SUT.IsRyuuiisou(oHand, new List<Block>()));
+        }
     }
 }

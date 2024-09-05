@@ -1,6 +1,8 @@
-﻿namespace Mahjong.Model
+﻿using System;
+
+namespace Mahjong.Model
 {
-    public class Tile
+    public class Tile : IEquatable<Tile>
     {
         public int num;
         public string suit;
@@ -15,6 +17,20 @@
         {
             num = poTile.num;
             suit = poTile.suit; 
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            Tile objAsTile = obj as Tile;
+            if (objAsTile == null) return false;
+            else return Equals(objAsTile);
+        }
+
+        public bool Equals(Tile other)
+        {
+            if (other == null) return false;
+            return this.num == other.num && this.suit == other.suit;
         }
 
         public Tile(int compareValue)
