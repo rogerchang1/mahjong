@@ -176,8 +176,9 @@ namespace Mahjong
                 han += yakuHan;
             }
             oScore.Han = han;
-            oScore.Fu = CalculateFu(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
-            oScore.FuBreakdown = GetFuBreakdown(poHand, poBlockCombination, bIsPinfu, bIsChiitoi);
+            ScoreFu oScoreFu = CalculateFu(poHand, poBlockCombination, bIsPinfu, bIsChiitoi, bIsKokushi);
+            oScore.Fu = oScoreFu.Fu;
+            oScore.FuBreakdown = oScoreFu.FuBreakdown;
             double oPayment = 0;
 
             if(han == 5 || (han == 4 && oScore.Fu >= 40) || (han == 3 && oScore.Fu >= 70) )
@@ -228,38 +229,46 @@ namespace Mahjong
                 }
                 oScore.AllPayment["Regular"] = (int)(Math.Ceiling((decimal)oPayment / 100) * 100);
             }
-
-            
-            
-
             return oScore;
         }
-        public int CalculateFu(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false, Boolean pbIsKokushiMusou = false)
+        public ScoreFu CalculateFu(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false, Boolean pbIsKokushiMusou = false)
         {
+            ScoreFu oScoreFu = new ScoreFu();
+            List<string> oFuBreakdown = new List<string>() { "Base fu - 20 fu" };
             if (pbIsChiitoi)
             {
-                return 25;
+                oScoreFu.Fu = 25;
+                oScoreFu.FuBreakdown = new List<string>() { "Chiitoitsu fu - 20 fu" };
+                return oScoreFu;
             }
             if (pbIsKokushiMusou)
             {
-                return 20;
+                oScoreFu.Fu = 20;
+                return oScoreFu;
             }
             if (pbIsPinfu)
             {
                 if(poHand.Agari == Agari.Tsumo)
                 {
-                    return 20;
+                    oScoreFu.Fu = 20;
+                    oScoreFu.FuBreakdown = oFuBreakdown;
+                    return oScoreFu;
                 }
-                return 30;
+                oScoreFu.Fu = 30;
+                oFuBreakdown.Add("Closed Ron - 10 fu");
+                oScoreFu.FuBreakdown = oFuBreakdown;
+                return oScoreFu;
             }
             int nFu = 20;
             if (poHand.Agari == Agari.Tsumo)
             {
                 nFu += 2;
+                oFuBreakdown.Add("Tsumo - 2 fu");
             }
             if (poHand.Agari == Agari.Ron && _TilesManager.IsHandClosed(poHand))
             {
                 nFu += 10;
+                oFuBreakdown.Add("Closed Ron - 10 fu");
             }
             Boolean bIsWinTileFuCounted = false;
 
@@ -274,121 +283,22 @@ namespace Mahjong
                 if(oBlock.Type == Mentsu.Kantsu || oBlock.Type == Mentsu.Koutsu)
                 {
                     nBlockFu = 2;
+                    string sBlock = "";
                     if (oBlock.IsOpen == false && !(poHand.Agari == Agari.Ron && _TilesManager.ContainsTileOf(oBlock.Tiles, poHand.WinTile))) 
                     {
                         nBlockFu = nBlockFu * 2;
-                    }
-                    if (_TilesManager.IsTerminalTile(oBlock.Tiles[0]) || _TilesManager.IsHonorTile(oBlock.Tiles[0]))
-                    {
-                        nBlockFu = nBlockFu * 2;
-                    }
-                    if(oBlock.Type == Mentsu.Kantsu)
-                    {
-                        nBlockFu = nBlockFu * 4;
-                    }
-                }
-                else if(oBlock.Type == Mentsu.Shuntsu)
-                {
-                    if(_TilesManager.IsTileAKanChan(oBlock.Tiles,poHand.WinTile) || _TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
-                    {
-                        if (!bIsWinTileFuCounted)
-                        {
-                            nBlockFu += 2;
-                            bIsWinTileFuCounted = true;
-                        }
-                    }
-                }
-                else
-                {
-                    //Jantou is left
-                    if (_TilesManager.ContainsTileOf(oBlock.Tiles, poHand.WinTile))
-                    {
-                        if (!bIsWinTileFuCounted)
-                        {
-                            nBlockFu += 2;
-                            bIsWinTileFuCounted = true;
-                        }
-                    }
-                    if (_TilesManager.IsDragonTile(oBlock.Tiles[0]))
-                    {
-                        nBlockFu += 2;
-                    }
-                    if (oBlock.Tiles[0].CompareTo(WindEnumToTile(poHand.RoundWind)) == 0)
-                    {
-                        nBlockFu += 2;
-                    }
-                    if (oBlock.Tiles[0].CompareTo(WindEnumToTile(poHand.SeatWind)) == 0)
-                    {
-                        nBlockFu += 2;
-                    }
-                }
-                nFu += nBlockFu;
-            }
-            nFu = (int)(Math.Ceiling((decimal)nFu / 10) * 10);
-
-            return nFu;
-        }
-
-        public List<string> GetFuBreakdown(Hand poHand, List<Block> poBlockCombination, Boolean pbIsPinfu = false, Boolean pbIsChiitoi = false, Boolean pbIsKokushiMusou = false)
-        {
-            List<string> oFuBreakdown = new List<string>() { "Base fu - 20 fu" };
-            if (pbIsChiitoi)
-                {
-                    return new List<string>() { "Chiitoitsu - 25 fu"};
-                }
-                if (pbIsKokushiMusou)
-                {
-                    return new List<string>();
-                }
-                if (pbIsPinfu)
-                {
-                    if (poHand.Agari == Agari.Tsumo)
-                    {
-                    return new List<string>() { "Base fu - 20 fu" };
-                }
-                    return new List<string>() { "Base fu - 20 fu", "Closed Ron - 10 fu" };
-            }
-                int nFu = 20;
-                if (poHand.Agari == Agari.Tsumo)
-                {
-                    oFuBreakdown.Add("Tsumo - 2 fu");
-                    nFu += 2;
-                }
-                if (poHand.Agari == Agari.Ron && _TilesManager.IsHandClosed(poHand))
-                {
-                    oFuBreakdown.Add("Closed Ron - 10 fu");
-                    nFu += 10;
-            }
-            Boolean bIsWinTileFuCounted = false;
-
-            foreach (Block oBlock in poBlockCombination)
-            {
-                int nBlockFu = 0;
-                if (oBlock.Type == Mentsu.Unknown)
-                {
-                    throw new Exception("Unknown Block Type");
-                }
-
-                if (oBlock.Type == Mentsu.Kantsu || oBlock.Type == Mentsu.Koutsu)
-                {
-                    nBlockFu = 2;
-                    string sBlock = "";
-                    if (oBlock.IsOpen == false && !(poHand.Agari == Agari.Ron && _TilesManager.ContainsTileOf(oBlock.Tiles, poHand.WinTile)))
-                    {
-                        nBlockFu = nBlockFu * 2;
                         sBlock += "Closed ";
-                    
                     }
                     else
                     {
-                        sBlock += "Open ";
+                        sBlock = "Open ";
                     }
                     if (_TilesManager.IsTerminalTile(oBlock.Tiles[0]) || _TilesManager.IsHonorTile(oBlock.Tiles[0]))
                     {
                         nBlockFu = nBlockFu * 2;
                         sBlock += "Terminal/Honor ";
                     }
-                    if (oBlock.Type == Mentsu.Kantsu)
+                    if(oBlock.Type == Mentsu.Kantsu)
                     {
                         nBlockFu = nBlockFu * 4;
                         sBlock += "Quad ";
@@ -400,22 +310,22 @@ namespace Mahjong
                     sBlock += "- " + nBlockFu + " fu";
                     oFuBreakdown.Add(sBlock);
                 }
-                else if (oBlock.Type == Mentsu.Shuntsu)
+                else if(oBlock.Type == Mentsu.Shuntsu)
                 {
-                    if (_TilesManager.IsTileAKanChan(oBlock.Tiles, poHand.WinTile) || _TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
+                    if(_TilesManager.IsTileAKanChan(oBlock.Tiles,poHand.WinTile) || _TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
                     {
                         if (!bIsWinTileFuCounted)
                         {
                             nBlockFu += 2;
                             bIsWinTileFuCounted = true;
-                            if(_TilesManager.IsTileAKanChan(oBlock.Tiles, poHand.WinTile))
+                            if (_TilesManager.IsTileAKanChan(oBlock.Tiles, poHand.WinTile))
                             {
                                 oFuBreakdown.Add("Closed Wait - 2 fu");
-                            }else if(_TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
+                            }
+                            else if (_TilesManager.IsTileAPenChan(oBlock.Tiles, poHand.WinTile))
                             {
                                 oFuBreakdown.Add("Edge Wait - 2 fu");
                             }
-                            
                         }
                     }
                 }
@@ -429,7 +339,7 @@ namespace Mahjong
                             nBlockFu += 2;
                             bIsWinTileFuCounted = true;
                             oFuBreakdown.Add("Pair Wait - 2 fu");
-                    }
+                        }
                     }
                     if (_TilesManager.IsDragonTile(oBlock.Tiles[0]))
                     {
@@ -453,9 +363,10 @@ namespace Mahjong
             nFu = (int)(Math.Ceiling((decimal)nFu / 10) * 10);
             int roundUp = nFu - oldFu;
             oFuBreakdown.Add("Round Up - " + roundUp + " fu");
+            oScoreFu.Fu = nFu;
+            oScoreFu.FuBreakdown = oFuBreakdown;
 
-            return oFuBreakdown;
-            
+            return oScoreFu;
         }
     }
 }
